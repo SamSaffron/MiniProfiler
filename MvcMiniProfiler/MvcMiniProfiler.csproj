@@ -92,6 +92,9 @@
       <DependentUpon>MiniProfiler.cs</DependentUpon>
     </Compile>
     <Compile Include="MiniProfiler.cs" />
+    <Compile Include="MiniProfilerAttribute.cs" >
+      <DependentUpon>MiniProfiler.cs</DependentUpon>
+    </Compile>	
     <Compile Include="MVCHelpers\ProfilingActionFilter.cs" />
     <Compile Include="MVCHelpers\ProfilingViewEngine.cs" />
     <Compile Include="SqlFormatters\InlineFormatter.cs" />

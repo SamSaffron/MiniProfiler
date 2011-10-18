@@ -111,6 +111,11 @@ namespace MvcMiniProfiler
         public bool HasUserViewed { get; set; }
 
         /// <summary>
+        /// Stores any attribute names and values used by the user.
+        /// </summary>
+        internal List<MiniProfilerAttribute> Attributes { get; private set; }
+
+        /// <summary>
         /// Contains information about queries executed during this profiling session.
         /// </summary>
         internal SqlProfiler SqlProfiler { get; private set; }
@@ -210,6 +215,10 @@ namespace MvcMiniProfiler
         /// </summary>
         public Timing Head { get; set; }
 
+        ///<summary>
+        /// Does the attribute collection have any values
+        ///</summary>
+        public bool HasAttributes { get; set; }
 
         /// <summary>
         /// Creates and starts a new MiniProfiler for the root <paramref name="url"/>, filtering <see cref="Timing"/> steps to <paramref name="level"/>.
@@ -219,6 +228,7 @@ namespace MvcMiniProfiler
             Id = Guid.NewGuid();
             Level = level;
             SqlProfiler = new SqlProfiler(this);
+            Attributes = new List<MiniProfilerAttribute>();
             MachineName = Environment.MachineName;
             _sqlCounts = new Dictionary<string, int>();
             Started = DateTime.UtcNow;
@@ -278,6 +288,19 @@ namespace MvcMiniProfiler
             }
 
             Head.AddSqlTiming(stats);
+        }
+
+        ///<summary>
+        ///</summary>
+
+        public void AddAttribute(MiniProfilerAttribute attribute)
+        {
+            if (Attributes == null)
+                return;
+
+            HasAttributes = true;
+
+            Attributes.Add(attribute);
         }
 
         /// <summary>

@@ -63,7 +63,7 @@ select       @Id,
 where not exists (select 1 from MiniProfilers where Id = @Id)"; // this syntax works on both mssql and sqlite
 
             using (var conn = GetOpenConnection())
-            {
+            { 
                 var insertCount = conn.Execute(sql, new
                 {
                     Id = profiler.Id,
@@ -84,8 +84,42 @@ where not exists (select 1 from MiniProfilers where Id = @Id)"; // this syntax w
                 });
 
                 if (insertCount > 0)
+                {
                     SaveTiming(conn, profiler, profiler.Root);
+                    SaveAttributes(conn,profiler);
+                }
             }
+        }
+
+        private void SaveAttributes(DbConnection conn, MiniProfiler profiler)
+        {
+            if (profiler.HasAttributes)
+            {
+                foreach (var att in profiler.Attributes)
+                {
+                    SaveAttribute(conn, profiler, att);
+                }
+            }
+        }
+
+        private void SaveAttribute(DbConnection conn, MiniProfiler profiler, MiniProfilerAttribute profilerAttribute)
+        {
+            const string sql =
+                @"insert into MiniProfilerAttributes
+                                    (MiniProfilerId
+                                    ,Name
+                                    ,Value)
+                                VALUES
+                                    (@MiniProfilerId
+                                    ,@Name
+                                    ,@Value)";
+
+            conn.Execute(sql, new
+            {
+                MiniProfilerId = profiler.Id,
+                Name = profilerAttribute.Name,
+                Value = profilerAttribute.Value
+            });
         }
 
         /// <summary>
@@ -345,6 +379,13 @@ order  by Started";
      HasAllTrivialTimings                 bit not null,
      TrivialDurationThresholdMilliseconds decimal(5, 1) null,
      HasUserViewed                        bit not null
+  )
+
+create table MiniProfilerAttributes
+  (
+	MiniProfilerId uniqueidentifier not null,
+	Name varchar(130) not null,
+	Value nvarchar(max) null
   )
 
 create table MiniProfilerTimings
