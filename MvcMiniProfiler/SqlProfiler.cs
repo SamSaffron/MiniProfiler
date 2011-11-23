@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using System.Data.Common;
 using MvcMiniProfiler.Data;
 using System.Linq;
+
+#if CSHARP30
+using Tuple = MvcMiniProfiler.Tuple;
+#else
 using System.Collections.Concurrent;
+#endif
 
 namespace MvcMiniProfiler
 {
-
-    // TODO: refactor this out into MiniProfiler
+	// TODO: refactor this out into MiniProfiler
     /// <summary>
     /// Contains helper code to time sql statements.
     /// </summary>
     public class SqlProfiler
     {
-        ConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming> _inProgress = new ConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming>();
-        ConcurrentDictionary<DbDataReader, SqlTiming> _inProgressReaders = new ConcurrentDictionary<DbDataReader, SqlTiming>();
-
-        /// <summary>
+#if CSHARP30
+		IConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming> _inProgress = new MiniConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming>();
+		IConcurrentDictionary<DbDataReader, SqlTiming> _inProgressReaders = new MiniConcurrentDictionary<DbDataReader, SqlTiming>();
+#else
+		IConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming> _inProgress = new MiniConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming>();
+		IConcurrentDictionary<DbDataReader, SqlTiming> _inProgressReaders = new MiniConcurrentDictionary<DbDataReader, SqlTiming>();
+#endif
+		/// <summary>
         /// The profiling session this SqlProfiler is part of.
         /// </summary>
         public MiniProfiler Profiler { get; private set; }
@@ -112,4 +120,62 @@ namespace MvcMiniProfiler
         }
 
     }
+
+	internal interface IConcurrentDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+	{
+		bool TryRemove(TKey key, out TValue value);
+	}
+
+#if CSHARP30
+	internal static class Tuple
+	{
+		public static Tuple<T1, T2> Create<T1, T2>(T1 item1, T2 item2)
+		{
+			return new Tuple<T1, T2>(item1, item2);
+		}
+	}
+
+	internal class Tuple<T1, T2>
+	{
+		public Tuple(T1 item1, T2 item2)
+		{
+			Item1 = item1;
+			Item2 = item2;
+		}
+
+		public T1 Item1 { get; private set; }
+		public T2 Item2 { get; private set; }
+
+		public override int GetHashCode()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override bool Equals(object obj)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override string ToString()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	internal class MiniConcurrentDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IConcurrentDictionary<TKey, TValue>
+	{
+		public bool TryRemove(TKey key, out TValue value)
+		{
+			throw new NotImplementedException();
+		}
+	}
+#else
+	internal class MiniConcurrentDictionary<TKey, TValue> : ConcurrentDictionary<TKey, TValue>, IConcurrentDictionary<TKey, TValue>
+	{
+		bool IConcurrentDictionary<TKey, TValue>.TryRemove(TKey key, out TValue value)
+		{
+			return base.TryRemove(key, out value);
+		}
+	}
+#endif
 }

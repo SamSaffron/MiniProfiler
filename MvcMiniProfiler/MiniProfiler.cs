@@ -320,7 +320,25 @@ namespace MvcMiniProfiler
             return MiniProfilerExtensions.Step(Current, name, level);
         }
 
-        /// <summary>
+#if CSHARP30
+		/// <summary>
+		/// Returns the css and javascript includes needed to display the MiniProfiler results UI.
+		/// </summary>
+		/// <param name="position">Which side of the page the profiler popup button should be displayed on (defaults to left)</param>
+		/// <param name="showTrivial">Whether to show trivial timings by default (defaults to false)</param>
+		/// <param name="showTimeWithChildren">Whether to show time the time with children column by default (defaults to false)</param>
+		/// <param name="maxTracesToShow">The maximum number of trace popups to show before removing the oldest (defaults to 15)</param>
+		/// <param name="xhtml">xhtml rendering mode, ensure script tag is closed ... etc</param>
+		/// <param name="showControls">when true, shows buttons to minimize and clear MiniProfiler results</param>
+		/// <returns>Script and link elements normally; an empty string when there is no active profiling session.</returns>
+		public static string RenderIncludes(RenderPosition? position = null, bool? showTrivial = null, bool? showTimeWithChildren = null, int? maxTracesToShow = null, bool xhtml = false, bool? showControls = null)
+		{
+			var result = UI.MiniProfilerHandler.RenderIncludes(Current, position, showTrivial, showTimeWithChildren, maxTracesToShow, xhtml, showControls);
+
+			return result.ToString();
+		}
+#else
+		/// <summary>
         /// Returns the css and javascript includes needed to display the MiniProfiler results UI.
         /// </summary>
         /// <param name="position">Which side of the page the profiler popup button should be displayed on (defaults to left)</param>
@@ -334,8 +352,9 @@ namespace MvcMiniProfiler
         {
             return UI.MiniProfilerHandler.RenderIncludes(Current, position, showTrivial, showTimeWithChildren, maxTracesToShow, xhtml, showControls);
         }
+#endif
 
-        /// <summary>
+		/// <summary>
         /// Gets the currently running MiniProfiler for the current HttpContext; null if no MiniProfiler was <see cref="Start"/>ed.
         /// </summary>
         public static MiniProfiler Current
@@ -486,7 +505,35 @@ namespace MvcMiniProfiler
             profiler.Head.AddChild(externalProfiler.Root);
         }
 
+#if CSHARP30
         /// <summary>
+        /// Returns an html-encoded string with a text-representation of <paramref name="profiler"/>; returns "" when profiler is null.
+        /// </summary>
+        /// <param name="profiler">The current profiling session or null.</param>
+        public static string Render(this MiniProfiler profiler)
+        {
+            if (profiler == null) return string.Empty;
+
+            var text = new StringBuilder()
+                .Append(HttpUtility.HtmlEncode(Environment.MachineName)).Append(" at ").Append(DateTime.UtcNow).AppendLine();
+
+            Stack<Timing> timings = new Stack<Timing>();
+            timings.Push(profiler.Root);
+            while (timings.Count > 0)
+            {
+                var timing = timings.Pop();
+                string name = HttpUtility.HtmlEncode(timing.Name);
+                text.AppendFormat("{2} {0} = {1:###,##0.##}ms", name, timing.DurationMilliseconds, new string('>', timing.Depth)).AppendLine();
+                if (timing.HasChildren)
+                {
+                    IList<Timing> children = timing.Children;
+                    for (int i = children.Count - 1; i >= 0; i--) timings.Push(children[i]);
+                }
+            }
+            return text.ToString();
+        }
+#else
+		/// <summary>
         /// Returns an html-encoded string with a text-representation of <paramref name="profiler"/>; returns "" when profiler is null.
         /// </summary>
         /// <param name="profiler">The current profiling session or null.</param>
@@ -512,6 +559,6 @@ namespace MvcMiniProfiler
             }
             return new HtmlString(text.ToString());
         }
-
-    }
+#endif
+	}
 }

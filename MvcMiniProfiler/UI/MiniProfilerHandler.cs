@@ -259,6 +259,27 @@ namespace MvcMiniProfiler.UI
 
             return message;
         }
-
     }
+
+#if CSHARP30
+	internal class HtmlString
+	{
+		public HtmlString()
+			: this(String.Empty)
+		{
+		}
+
+		public HtmlString(string value)
+		{
+			_value = value;
+		}
+
+		private string _value;
+
+		public override string ToString()
+		{
+			return _value;
+		}
+	}
+#endif
 }
