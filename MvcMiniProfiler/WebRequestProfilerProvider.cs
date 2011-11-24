@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿using System.Web;
+using System.Web.Mvc;
 
 #if CSHARP30
 using System.Web.Routing;
-#else
-using System.Web.Mvc;
 #endif
 
 using MvcMiniProfiler.Helpers;
