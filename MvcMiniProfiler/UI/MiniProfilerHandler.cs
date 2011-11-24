@@ -178,11 +178,11 @@ namespace MvcMiniProfiler.UI
         {
             // when we're rendering as a button/popup in the corner, we'll pass ?popup=1
             // if it's absent, we're rendering results as a full page for sharing
-            var isPopup = !string.IsNullOrWhiteSpace(context.Request.QueryString["popup"]);
+			var isPopup = !ExtensionMethods.IsNullOrWhiteSpace(context.Request.QueryString["popup"]);
 
             // this guid is the MiniProfiler.Id property
             Guid id;
-            if (!Guid.TryParse(context.Request.QueryString["id"], out id))
+            if (!GuidHelper.TryParse(context.Request.QueryString["id"], out id))
                 return isPopup ? NotFound(context) : NotFound(context, "text/plain", "No Guid id specified on the query string");
 
             MiniProfiler.Settings.EnsureStorageStrategy();

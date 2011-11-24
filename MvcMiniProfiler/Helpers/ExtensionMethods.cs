@@ -17,7 +17,25 @@ namespace MvcMiniProfiler.Helpers
         /// </summary>
         internal static bool IsNullOrWhiteSpace(this string s)
         {
+#if CSHARP30
+			var result = false;
+			if (String.IsNullOrEmpty(s))
+			{
+				result = true;
+			}
+			else if (s.Trim() == String.Empty)
+			{
+				result = true;
+			}
+			else
+			{
+				result = false;
+			}
+
+			return result;
+#else
             return string.IsNullOrWhiteSpace(s);
+#endif
         }
 
         /// <summary>
@@ -25,7 +43,7 @@ namespace MvcMiniProfiler.Helpers
         /// </summary>
         internal static bool HasValue(this string s)
         {
-            return !string.IsNullOrWhiteSpace(s);
+			return !ExtensionMethods.IsNullOrWhiteSpace(s);
         }
 
         internal static string Truncate(this string s, int maxLength)

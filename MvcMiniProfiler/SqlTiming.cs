@@ -212,7 +212,7 @@ namespace MvcMiniProfiler
 
             foreach (DbParameter dbParameter in command.Parameters)
             {
-                if (!string.IsNullOrWhiteSpace(dbParameter.ParameterName))
+				if (!ExtensionMethods.IsNullOrWhiteSpace(dbParameter.ParameterName))
                 {
                     var formattedParameterValue = GetFormattedParameterValue(dbParameter);
                     result.Add(new SqlTimingParameter

@@ -265,7 +265,7 @@ values      (@MiniProfilerId,
             { typeof(SqlTimingParameter), "select * from MiniProfilerSqlTimingParameters where MiniProfilerId = @id" }
         };
 
-        private static readonly string LoadSqlBatch = string.Join("\n", LoadSqlStatements.Select(pair => pair.Value));
+        private static readonly string LoadSqlBatch = string.Join("\n", LoadSqlStatements.Select(pair => pair.Value).ToArray());
 
         /// <summary>
         /// Loads the MiniProfiler identifed by 'id' from the database.
@@ -297,7 +297,7 @@ values      (@MiniProfilerId,
         {
             MiniProfiler result;
 
-            using (var multi = conn.QueryMultiple(LoadSqlBatch, idParameter))
+            using (var multi = conn.QueryMultiple(LoadSqlBatch, idParameter, null, null, null))
             {
                 result = multi.Read<MiniProfiler>().SingleOrDefault();
 

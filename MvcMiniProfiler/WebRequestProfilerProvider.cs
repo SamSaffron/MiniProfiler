@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+
+#if CSHARP30
 using System.Web.Routing;
+#else
+using System.Web.Mvc;
+#endif
+
 using MvcMiniProfiler.Helpers;
 
 namespace MvcMiniProfiler
@@ -105,9 +111,18 @@ namespace MvcMiniProfiler
         private static void EnsureName(MiniProfiler profiler, HttpRequest request)
         {
             // also set the profiler name to Controller/Action or /url
-            if (string.IsNullOrWhiteSpace(profiler.Name))
-            {
-                var rc = request.RequestContext;
+			if (ExtensionMethods.IsNullOrWhiteSpace(profiler.Name))
+			{
+#if CSHARP30
+				RequestContext rc = null; 
+				var handler = ((MvcHandler)HttpContext.Current.Handler);
+				if (handler != null)
+				{
+					rc = handler.RequestContext;
+				}
+#else
+				var rc = request.RequestContext;
+#endif
                 RouteValueDictionary values;
 
                 if (rc != null && rc.RouteData != null && (values = rc.RouteData.Values).Count > 0)
@@ -119,7 +134,7 @@ namespace MvcMiniProfiler
                         profiler.Name = controller.ToString() + "/" + action.ToString();
                 }
 
-                if (string.IsNullOrWhiteSpace(profiler.Name))
+				if (ExtensionMethods.IsNullOrWhiteSpace(profiler.Name))
                 {
                     profiler.Name = request.Url.AbsolutePath ?? "";
                     if (profiler.Name.Length > 50)

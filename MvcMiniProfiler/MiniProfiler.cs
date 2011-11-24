@@ -391,7 +391,7 @@ namespace MvcMiniProfiler
         /// </summary>
         public static MiniProfiler FromJson(string json)
         {
-            if (string.IsNullOrWhiteSpace(json)) return null;
+			if (ExtensionMethods.IsNullOrWhiteSpace(json)) return null;
 
             var result = new JavaScriptSerializer().Deserialize<MiniProfiler>(json);
             return result;

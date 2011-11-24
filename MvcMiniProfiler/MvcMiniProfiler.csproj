@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,12 +10,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MvcMiniProfiler</RootNamespace>
     <AssemblyName>MvcMiniProfiler</AssemblyName>
-    <FileAlignment>512</FileAlignment>    
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-		<TargetFrameworkProfile />
-		<DebugSymbols>true</DebugSymbols>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
@@ -25,9 +25,9 @@
     <DocumentationFile>bin\Debug\MvcMiniProfiler.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-		<TargetFrameworkProfile />
-		<DebugType>pdbonly</DebugType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;ASP_NET_MVC3</DefineConstants>
@@ -45,9 +45,9 @@
     <AssemblyOriginatorKeyFile>miniprofiler.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Debug|AnyCPU'">
-		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-		<TargetFrameworkProfile />
-		<DebugSymbols>true</DebugSymbols>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET35-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CSHARP30</DefineConstants>
     <DocumentationFile>bin\Debug\MvcMiniProfiler.XML</DocumentationFile>
@@ -65,9 +65,9 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
-		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-		<TargetFrameworkProfile />
-		<OutputPath>bin\NET35-Release\</OutputPath>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <OutputPath>bin\NET35-Release\</OutputPath>
     <DefineConstants>TRACE;CSHARP30</DefineConstants>
     <DocumentationFile>bin\Release\MvcMiniProfiler.xml</DocumentationFile>
     <Optimize>true</Optimize>
@@ -92,10 +92,10 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Xml" />    
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFrameworkVersion)=='v3.5'">
-  	<Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.Routing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseProfilerProvider.cs">
@@ -104,6 +104,7 @@
     <Compile Include="Data\ExecuteType.cs" />
     <Compile Include="Data\IDbProfiler.cs" />
     <Compile Include="Data\ProfiledDbProviderFactory.cs" />
+    <Compile Include="DotNet35Support.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs">
       <SubType>Code</SubType>
     </Compile>

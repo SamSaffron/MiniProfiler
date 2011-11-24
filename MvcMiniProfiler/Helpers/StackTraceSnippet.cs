@@ -43,7 +43,7 @@ namespace MvcMiniProfiler.Helpers
 				}
 			}
 
-			var result = string.Join(" ", methods);
+			var result = string.Join(" ", methods.ToArray());
 
             if (result.Length > MiniProfiler.Settings.StackMaxLength)
             {
