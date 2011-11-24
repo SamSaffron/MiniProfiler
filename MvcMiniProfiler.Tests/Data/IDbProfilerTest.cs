@@ -140,6 +140,7 @@ namespace MvcMiniProfiler.Tests.Data
             }
         }
 
+#if !CSHARP30
         [Test]
         public void DataAdapter()
         {
@@ -165,6 +166,6 @@ namespace MvcMiniProfiler.Tests.Data
             Assert.That(mp.ExecutedScalars == 0);
             Assert.That(mp.ExecutedNonQueries == 0);
         }
-
+#endif
     }
 }
