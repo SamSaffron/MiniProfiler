@@ -110,7 +110,7 @@ namespace MvcMiniProfiler
 			{
 #if CSHARP30
 				RequestContext rc = null; 
-				var handler = ((MvcHandler)HttpContext.Current.Handler);
+				var handler = HttpContext.Current.Handler as MvcHandler;
 				if (handler != null)
 				{
 					rc = handler.RequestContext;
