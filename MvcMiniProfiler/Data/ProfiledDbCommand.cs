@@ -9,6 +9,7 @@ using System.Reflection.Emit;
 
 namespace MvcMiniProfiler.Data
 {
+    [System.ComponentModel.DesignerCategory("")]
     public class ProfiledDbCommand : DbCommand, ICloneable
     {
         protected DbCommand _cmd;
