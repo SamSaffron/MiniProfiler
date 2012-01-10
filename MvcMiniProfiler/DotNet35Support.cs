@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using System.Threading;
+using System.Linq;
 
 #if !CSHARP30
 using System.Collections.Concurrent;
@@ -147,7 +148,7 @@ namespace MvcMiniProfiler
 				_lock.EnterReadLock();
 				try
 				{
-					return _dict.Values;
+					return _dict.Values.ToList();
 				}
 				finally
 				{
