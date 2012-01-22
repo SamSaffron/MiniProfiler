@@ -433,7 +433,16 @@ namespace MvcMiniProfiler.Helpers.Dapper
         }
 
 #if CSHARP30
-        /// <summary>
+		/// <summary>
+		/// Execute SQL  
+		/// </summary>
+		/// <returns>Number of rows affected</returns>
+		public static int Execute(this IDbConnection cnn, string sql)
+		{
+			return Execute(cnn, sql, null, null, null, null);
+		}
+		
+		/// <summary>
         /// Execute parameterized SQL  
         /// </summary>
         /// <returns>Number of rows affected</returns>
@@ -441,7 +450,29 @@ namespace MvcMiniProfiler.Helpers.Dapper
         {
             return Execute(cnn, sql, param, null, null, null);
         }
-        /// <summary>
+
+		/// <summary>
+		/// Executes a query, returning the data typed as per T
+		/// </summary>
+		public static IEnumerable Query(this IDbConnection cnn, string sql)
+		{
+			return Query<object>(cnn, sql, null, null, true, null, null);
+		}
+
+		/// <summary>
+		/// Executes a query, returning the data typed as per T
+		/// </summary>
+		public static IEnumerable<T> Query<T>(this IDbConnection cnn, string sql)
+		{
+			return Query<T>(cnn, sql, null, null, true, null, null);
+		}
+
+		public static IEnumerable Query(this IDbConnection cnn, string sql, object param)
+		{
+			return Query<object>(cnn, sql, param, null, true, null, null);
+		}
+
+		/// <summary>
         /// Executes a query, returning the data typed as per T
         /// </summary>
         /// <remarks>the dynamic param may seem a bit odd, but this works around a major usability issue in vs, if it is Object vs completion gets annoying. Eg type new <space> get new object</remarks>
@@ -452,7 +483,6 @@ namespace MvcMiniProfiler.Helpers.Dapper
         {
             return Query<T>(cnn, sql, param, null, true, null, null);
         }
-
 #endif
         /// <summary>
         /// Execute parameterized SQL  

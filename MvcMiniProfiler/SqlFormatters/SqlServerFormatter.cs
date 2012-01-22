@@ -72,7 +72,7 @@ namespace MvcMiniProfiler.SqlFormatters
 
                 DbType parsed;
                 string resolvedType = null;
-                if (!Enum.TryParse<DbType>(p.DbType, out parsed))
+                if (!EnumHelper.TryParse<DbType>(p.DbType, out parsed))
                 {
                     resolvedType = p.DbType;
                 }

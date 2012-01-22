@@ -9,6 +9,7 @@ using System.IO;
 using System.Data.SqlServerCe;
 using MvcMiniProfiler.Helpers.Dapper;
 using MvcMiniProfiler.Data;
+using MvcMiniProfiler.Helpers;
 
 namespace MvcMiniProfiler.Tests.Storage
 {
@@ -18,7 +19,7 @@ namespace MvcMiniProfiler.Tests.Storage
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            var sqlToExecute = SqlServerStorage.TableCreationScript.Replace("nvarchar(max)", "ntext").Split(';').Where(s => !string.IsNullOrWhiteSpace(s));
+			var sqlToExecute = SqlServerStorage.TableCreationScript.Replace("nvarchar(max)", "ntext").Split(';').Where(s => !ExtensionMethods.IsNullOrWhiteSpace(s));
             var connStr = CreateSqlCeDatabase<SqlServerStorageTest>(sqlToExecute: sqlToExecute);
 
             MiniProfiler.Settings.Storage = new SqlCeStorage(connStr);

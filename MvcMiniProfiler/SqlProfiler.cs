@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using System.Data.Common;
 using MvcMiniProfiler.Data;
 using System.Linq;
+
+#if CSHARP30
+using Tuple = MvcMiniProfiler.Tuple;
+#else
 using System.Collections.Concurrent;
+#endif
 
 namespace MvcMiniProfiler
 {
-
-    // TODO: refactor this out into MiniProfiler
+	// TODO: refactor this out into MiniProfiler
     /// <summary>
     /// Contains helper code to time sql statements.
     /// </summary>
     public class SqlProfiler
     {
-        ConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming> _inProgress = new ConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming>();
-        ConcurrentDictionary<DbDataReader, SqlTiming> _inProgressReaders = new ConcurrentDictionary<DbDataReader, SqlTiming>();
-
-        /// <summary>
+#if CSHARP30
+		IConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming> _inProgress = new MiniConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming>();
+		IConcurrentDictionary<DbDataReader, SqlTiming> _inProgressReaders = new MiniConcurrentDictionary<DbDataReader, SqlTiming>();
+#else
+		IConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming> _inProgress = new MiniConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming>();
+		IConcurrentDictionary<DbDataReader, SqlTiming> _inProgressReaders = new MiniConcurrentDictionary<DbDataReader, SqlTiming>();
+#endif
+		/// <summary>
         /// The profiling session this SqlProfiler is part of.
         /// </summary>
         public MiniProfiler Profiler { get; private set; }
