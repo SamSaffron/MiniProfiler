@@ -16,6 +16,15 @@ namespace MvcMiniProfiler.Data
         protected DbTransaction _tran;
         protected IDbProfiler _profiler;
 
+		/// <summary>
+		/// Gets the provider-specific internal command.  Used by the <see cref="ProfiledDataAdapter"/> to pass the real DbCommand on to
+		/// the native DbDataAdapter.
+		/// </summary>
+    	internal DbCommand InternalCommand
+    	{
+			get { return _cmd; }
+    	}
+
         private bool bindByName;
         /// <summary>
         /// If the underlying command supports BindByName, this sets/clears the underlying
