@@ -492,6 +492,9 @@ namespace MvcMiniProfiler
         {
             if (profiler == null || profiler.Head == null || externalProfiler == null) return;
             profiler.Head.AddChild(externalProfiler.Root);
+            
+            profiler.HasSqlTimings |= externalProfiler.HasSqlTimings;
+            profiler.HasDuplicateSqlTimings |= externalProfiler.HasDuplicateSqlTimings;
         }
 
         /// <summary>
