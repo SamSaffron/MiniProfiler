@@ -1,0 +1,7 @@
+_ReSharper*
+bin
+obj
+*.suo
+*.sqlite
+*.user
+*.sdf

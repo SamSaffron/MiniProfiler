@@ -1,4 +1,4 @@
-﻿@using MvcMiniProfiler
+﻿@using StackExchange.Profiling
 @{
     var profiler = MiniProfiler.Current;
 
@@ -23,6 +23,18 @@
         <tbody>
         </tbody>
     </table>    
+
+    <p>
+        <a href="/profiler/results-index">Show all profiling sessions</a>
+        @if (SampleWeb.MvcApplication.DisableProfilingResults)
+        {
+            <a href="/Home/EnableProfilingUI">Enable profiling UI (disabled)</a>
+        }
+        else
+        { 
+            <a href="/Home/DisableProfilingUI">Disable profiling UI</a>
+        }
+    </p>
 </div>
 
 <div style="width:50%; float:right;">
