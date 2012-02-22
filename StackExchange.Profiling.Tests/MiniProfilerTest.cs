@@ -39,5 +39,24 @@ namespace StackExchange.Profiling.Tests
             }
         }
 
+        [Test] 
+        public void TestAttributes()
+        {
+            var attribute = (new MiniProfilerAttribute("Test","1"));
+            using (GetRequest("http://localhost/Test.aspx", startAndStopProfiler: false))
+            {
+                MiniProfiler.Start();
+                MiniProfiler.Current.AddAttribute(attribute); 
+                IncrementStopwatch(); // 1 ms
+                MiniProfiler.Stop();
+
+                var c = MiniProfiler.Current;
+
+                Assert.That(c, Is.Not.Null);
+                Assert.That(c.HasAttributes);
+                Assert.That(c.Attributes[0],Is.EqualTo(attribute));
+            }
+        }
+
     }
 }

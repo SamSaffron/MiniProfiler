@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Web.Script.Serialization;
 
-namespace MvcMiniProfiler
+namespace StackExchange.Profiling
 {
     /// <summary>
     /// Additional attributes that need to be persisted for this session

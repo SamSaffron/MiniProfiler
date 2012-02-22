@@ -12,8 +12,6 @@ using System.Runtime.Serialization;
 
 namespace StackExchange.Profiling.Storage
 {
-    using MvcMiniProfiler;
-
     /// <summary>
     /// Understands how to store a <see cref="MiniProfiler"/> to a MSSQL database.
     /// </summary>

@@ -270,19 +270,18 @@ namespace StackExchange.Profiling
             Head.AddKeyValue(key, value);
         }
 
-        }
-
         ///<summary>
         ///</summary>
 
         public void AddAttribute(MiniProfilerAttribute attribute)
         {
-            if (Attributes == null)
-                return;
+            if (Attributes == null) return;
 
             HasAttributes = true;
 
             Attributes.Add(attribute);
+        }
+
         /// <summary>
         /// Walks the <see cref="Timing"/> hierarchy contained in this profiler, starting with <see cref="Root"/>, and returns each Timing found.
         /// </summary>
