@@ -53,7 +53,7 @@ namespace StackExchange.Profiling
         /// Roughly where in the calling code that this sql was executed.
         /// </summary>
         [DataMember(Order = 3)]
-        public string StackTraceSnippet { get; set; }
+        public List<SqlTimingStackTrace> StackTraceSnippet { get; set; }
 
         /// <summary>
         /// Offset from main MiniProfiler start that this sql began.

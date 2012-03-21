@@ -231,7 +231,7 @@ values      (@Id,
                 DurationMilliseconds = st.DurationMilliseconds,
                 FirstFetchDurationMilliseconds = st.FirstFetchDurationMilliseconds,
                 IsDuplicate = st.IsDuplicate,
-                StackTraceSnippet = st.StackTraceSnippet.Truncate(200),
+                StackTraceSnippet = string.Join(" ", (from m in st.StackTraceSnippet select m.Name)).Truncate(200), 
                 CommandString = st.CommandString
             });
 

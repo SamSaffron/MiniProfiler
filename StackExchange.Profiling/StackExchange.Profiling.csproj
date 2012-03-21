@@ -106,6 +106,9 @@
     <Compile Include="SqlTimingParameter.cs">
       <DependentUpon>SqlTiming.cs</DependentUpon>
     </Compile>
+    <Compile Include="SqlTimingStackTrace.cs">
+      <DependentUpon>SqlTiming.cs</DependentUpon>
+    </Compile>
     <Compile Include="Storage\HttpRuntimeCacheStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
