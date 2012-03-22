@@ -20,7 +20,7 @@ namespace StackExchange.Profiling
         public string Name { get; set; }
 
         /// <summary>
-        /// The method definition
+        /// The method definition (eg: "NameSpace.Class.Method(paramName1,paramName2)")
         /// </summary>
         [DataMember]
         public string Definition { get; set; }
@@ -30,12 +30,6 @@ namespace StackExchange.Profiling
         /// </summary>
         [DataMember]
         public string Assembly { get; set; }
-
-        /// <summary>
-        /// The full path of the method
-        /// </summary>
-        [DataMember]
-        public string FullPath { get; set; }
 
     }
 }

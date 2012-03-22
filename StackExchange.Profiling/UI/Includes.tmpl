@@ -175,9 +175,7 @@
       <div class="query">
         <div class="stack-trace">
           {{each(i,item) s.StackTraceSnippet}}
-            <abbr title="${item.FullPath}
-                  Assembly: ${item.Assembly}
-                  Definition: ${item.Definition}">${item.Name}</abbr>
+            <abbr title="${item.Definition} [Assembly: ${item.Assembly}]">${item.Name}</abbr>
           {{/each}}
         </div>
         <pre class="prettyprint lang-sql"><code>${s.FormattedCommandString}   </code></pre>

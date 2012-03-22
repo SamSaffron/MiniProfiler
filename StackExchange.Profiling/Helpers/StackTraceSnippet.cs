@@ -40,11 +40,17 @@ namespace StackExchange.Profiling.Helpers
 					!ShouldExcludeType(method) &&
 					!MiniProfiler.Settings.MethodsToExclude.Contains(method.Name))
 				{
+                    var @params = string.Join(",", (from x in method.GetParameters() 
+                                                    select x.Name));
+
                     methods.Add(new SqlTimingStackTrace()
                     {
                         Name = method.Name,
-                        Definition = method.ToString(),
-                        FullPath = string.Format("{0}.{1}.{2}", method.DeclaringType.Namespace, method.DeclaringType.Name, method.Name),
+                        Definition = string.Format("{0}.{1}.{2}({3})", 
+                                                   method.DeclaringType.Namespace, 
+                                                   method.DeclaringType.Name, 
+                                                   method.Name,
+                                                   @params),
                         Assembly = assembly,
                     });
                     stringLength += method.Name.Length;
