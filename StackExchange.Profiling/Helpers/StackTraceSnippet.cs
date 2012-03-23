@@ -16,12 +16,12 @@ namespace StackExchange.Profiling.Helpers
 		/// Gets the current formatted and filted stack trace.
 		/// </summary>
 		/// <returns>Space separated list of methods</returns>
-        public static List<SqlTimingStackTrace> Get()
+		public static List<SqlTimingStackTrace> Get()
 		{
-            var methods = new List<SqlTimingStackTrace>();
-            var stringLength = 0;
+			var methods = new List<SqlTimingStackTrace>();
+			var stringLength = 0;
 
-            var frames = new StackTrace().GetFrames();
+			var frames = new StackTrace().GetFrames();
 			if (frames == null)
 			{
 				return methods;
@@ -40,29 +40,29 @@ namespace StackExchange.Profiling.Helpers
 					!ShouldExcludeType(method) &&
 					!MiniProfiler.Settings.MethodsToExclude.Contains(method.Name))
 				{
-                    var @params = string.Join(",", (from x in method.GetParameters() 
-                                                    select x.Name));
+					var @params = string.Join(",", (from x in method.GetParameters() 
+													select x.Name));
 
-                    methods.Add(new SqlTimingStackTrace()
-                    {
-                        Name = method.Name,
-                        Definition = string.Format("{0}.{1}.{2}({3})", 
-                                                   method.DeclaringType.Namespace, 
-                                                   method.DeclaringType.Name, 
-                                                   method.Name,
-                                                   @params),
-                        Assembly = assembly,
-                    });
-                    stringLength += method.Name.Length;
+					methods.Add(new SqlTimingStackTrace()
+					{
+						Name = method.Name,
+						Definition = string.Format("{0}.{1}.{2}({3})", 
+												   method.DeclaringType.Namespace, 
+												   method.DeclaringType.Name, 
+												   method.Name,
+												   @params),
+						Assembly = assembly,
+					});
+					stringLength += method.Name.Length;
 				}
 
-                // check against max length
-                if (stringLength > MiniProfiler.Settings.StackMaxLength)
-                    break;
+				// check against max length
+				if (stringLength > MiniProfiler.Settings.StackMaxLength)
+					break;
 			}
 
-            return methods;
-        }
+			return methods;
+		}
 
 		private static bool ShouldExcludeType(MethodBase method)
 		{
