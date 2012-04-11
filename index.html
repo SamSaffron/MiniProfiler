@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="MiniProfiler : A simple but effective mini-profiler for ASP.NET MVC and ASP.NET." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>MiniProfiler</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/SamSaffron/MiniProfiler">Fork Me on GitHub</a>
+
+          <h1 id="project_title">MiniProfiler</h1>
+          <h2 id="project_tagline">A simple but effective mini-profiler for ASP.NET MVC and ASP.NET.</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/SamSaffron/MiniProfiler/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/SamSaffron/MiniProfiler/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>A simple but effective mini-profiler for ASP.NET MVC and ASP.NET.</p>
+
+<p>Official Repo: <a href="https://github.com/SamSaffron/MiniProfiler">https://github.com/SamSaffron/MiniProfiler</a></p>
+
+<p><em>IMPORTANT</em> for the 2.0 release the namespace for Mini Profiler is changing. Instead of <code>using MvcMiniProfiler</code> use <code>using StackExchange.Profiling</code></p>
+
+<h3>What does it profile?</h3>
+
+<p>MiniProfiler does <strong>not</strong> attach itself to every single method call; that would be too invasive and wouldn't focus on the biggest performance issues. Instead, it provides:</p>
+
+<ul>
+<li>An ADO.NET profiler, capable of profiling calls on raw ADO.NET (SQL Server, Oracle, etc), LINQ-to-SQL, EF / "Code First", <a href="http://www.mindscapehq.com/blog/index.php/2011/07/28/using-the-asp-net-mvc-mini-profiler-with-lightspeed/">Lightspeed</a> and a range of other data access scenarios</li>
+<li>A pragmatic <code>Step</code> instrumentation that you can add to code you want to explicitly profile</li>
+</ul><p>Simple. Fast. Pragmatic. Useful.</p>
+
+<h3>What is included?</h3>
+
+<p>A single assembly, with an example ASP.NET and ASP.NET MVC project to show usage.</p>
+
+<h2>Getting Started</h2>
+
+<p>Write out our css and javascript includes just before closing the body tag:</p>
+
+<pre><code>@using StackExchange.Profiling;
+&lt;head&gt;
+ ..
+&lt;/head&gt;
+&lt;body&gt;
+  ...
+  @MiniProfiler.RenderIncludes()
+&lt;/body&gt;
+</code></pre>
+
+<p>For requests that aren't being profiled, nothing will be written.</p>
+
+<ul>
+<li>Decide when you want to profile; perhaps for local requests, perhaps for special users (developers, admins, test team, whatever).</li>
+</ul><p>The sample project starts profiling in <code>Global.asax.cs</code> <code>Application_BeginRequest</code>:</p>
+
+<pre><code>using StackExchange.Profiling;
+...    
+protected void Application_BeginRequest()
+{
+    if (Request.IsLocal)
+    {
+        MiniProfiler.Start();
+    } 
+}
+</code></pre>
+
+<p>For the code you want to profile, use (regardless of whether the <code>profiler</code> is <code>null</code> or not):</p>
+
+<pre><code>using StackExchange.Profiling;
+...
+var profiler = MiniProfiler.Current; // it's ok if this is null
+using (profiler.Step("Set page title"))
+{
+    ViewBag.Title = "Home Page";
+}
+using (profiler.Step("Doing complex stuff"))
+{
+    using (profiler.Step("Step A"))
+    { // something more interesting here
+        Thread.Sleep(100);
+    }
+    using (profiler.Step("Step B"))
+    { // and here
+        Thread.Sleep(250);
+    }
+}
+</code></pre>
+
+<p>You can make this as granular or high-level as you like; passing a <code>MiniProfiler</code> in as an optional argument (defaulting to <code>null</code>) to downstream methods works well.</p>
+
+<p>Stop the profiler; the sample project does this in its <code>Global.asax.cs</code>:</p>
+
+<pre><code>protected void Application_EndRequest()
+{
+    MiniProfiler.Stop();
+}
+</code></pre>
+
+<p>If all goes well, you'll see something like this:</p>
+
+<p><img src="http://i.imgur.com/PsjLY.png" alt="demo"></p>
+
+<h3>Database profiling</h3>
+
+<p>The profiler includes powerful and comprehensive database profiling capabilities. To enable wrap your database connection with a profiling connection. </p>
+
+<p>The built in database profiler support any kind of DbConnection. It also supports Entity Framework and Linq-2-SQL. </p>
+
+<p>Usage: </p>
+
+<p>Use a factory to return your connection: </p>
+
+<pre><code>public static DbConnection GetOpenConnection()
+{
+    var cnn = CreateRealConnection(); // A SqlConnection, SqliteConnection ... or whatever
+
+    // wrap the connection with a profiling connection that tracks timings 
+    return new MvcMiniProfiler.Data.ProfiledDbConnection(cnn, MiniProfiler.Current);
+}
+</code></pre>
+
+<h3>Entity Framework</h3>
+
+<pre><code>  public static MyModel Get()
+  {
+     var conn =  new MvcMiniProfiler.Data.EFProfiledDbConnection(GetConnection(), MiniProfiler.Current);
+     return ObjectContextUtils.CreateObjectContext&lt;MyModel&gt;(conn); // resides in the MiniProfiler.EF nuget pack
+  }
+</code></pre>
+
+<h3>LINQ-2-SQL</h3>
+
+<pre><code>partial class DBContext
+{
+   public static DBContext Get()
+   {
+      var conn = new MvcMiniProfiler.Data.ProfiledDbConnection(GetConnection(), MiniProfiler.Current);
+      return new DBContext(conn);
+   }
+}
+</code></pre>
+
+<h3>Entity Framework - Code First</h3>
+
+<p>MVC Mini Profiler can be hooked in to an EF code first project. To do so: </p>
+
+<p>Install the Nuget MiniProfiler.EF package: </p>
+
+<p>Run: <code>MiniProfilerEF.Initialize(); // in Application_Start</code></p>
+
+<p>That's it ... you are done!</p>
+
+<p>Note: EF Code First will store table metadata in a table called: !EdmMetadata. This metadata uses the provider as part of the entity key. If you initialized your provider as a non-profiled provider, you will have to re-build this metadata. Deleting all the rows from !EdmMetadata may do the trick, alternatively some smarter providers are able to handle this transparently.  </p>
+
+<p><strong>EF 4.1 Update 1</strong></p>
+
+<p>Note, that EF 4.1 Update 1 (the version currently on NuGet) has a breaking change which throws the following error when specifying a connection string:</p>
+
+<p><code>The given assembly name or codebase was invalid. (Exception from HRESULT: 0x80131047)</code></p>
+
+<p>MiniProfiler attempts to resolve this issue by detecting the version of Entity Framework that it is running against. If this doesn't work (due to security exceptions), force the hack to be applied by replacing the <code>Initialize()</code> call with: </p>
+
+<p><code>MiniProfilerEF.Initialize_EF42(); // in Application_Start</code></p>
+
+<p>However, this is currently unable to profile SqlCE or Oracle databases. </p>
+
+<p>To work around this an additional parameter has been added to the <code>Initialize</code> call:</p>
+
+<ul>
+<li>If you specify connection strings explicitly in your <code>web.config</code>, use <code>MiniProfilerEF.Initialize();</code>. This will not profile SqlCE or Oracle databases</li>
+<li>If you don't specify connection strings (automatically inferred) and want SqlCE support, use <code>MiniProfilerEF.Initialize(false);</code>.</li>
+</ul><p>Note, this should be a temporary solution until EF 4.2 is widely available.</p>
+
+<h2>Various features</h2>
+
+<h3>(N+1) and duplicate query detection===</h3>
+
+<p>The profiler is able to detect and highlight areas where you are executing the same query multiple times with different parameters. This allows you to quickly find queries you may be able to batch. </p>
+
+<p><img src="http://i.stack.imgur.com/0P0pr.png" alt="N+1"></p>
+
+<h3>What about AJAX?</h3>
+
+<p>The profiler is also able to log all ajax calls: </p>
+
+<p><img src="http://i.stack.imgur.com/3k2NN.png" alt="ajax calls"></p>
+
+<p>You will get one profile timing per ajax call. </p>
+
+<h3>Abandoning a profiler session</h3>
+
+<p>Often at the beginning of a session you may not know if a user should or should not be allowed to profile, a common pattern for dealing with such issues is:</p>
+
+<pre><code>protected void Application_BeginRequest()
+{
+   MvcMiniProfiler.MiniProfiler.Start();  
+}
+protected void Application_AuthenticateRequest(Object sender, EventArgs e)
+{
+  if(!CurrentUserIsAllowedToSeeProfiler())
+  {
+    MvcMiniProfiler.MiniProfiler.Stop(discardResults: true);
+  }
+}
+</code></pre>
+
+<h3>Where is MiniProfiler used?</h3>
+
+<p>MiniProfiler was designed by the team at <a href="http://stackoverflow.com">Stack Overflow</a>. It is in production use there and on the <a href="http://stackexchange.com">Stack Exchange</a> family of sites. </p>
+
+<p>Also used at: </p>
+
+<ul>
+<li><a href="https://acturent.com">https://acturent.com</a></li>
+<li><a href="http://jobseriously.com">http://jobseriously.com</a></li>
+<li><a href="http://www.plane9.com">http://www.plane9.com</a></li>
+</ul><p>(if you are using this in production please let us know and we will add you to the list)</p>
+
+<h3>Frequently Asked Questions</h3>
+
+<p>If you have other questions, please visit <a href="http://stackoverflow.com/questions/tagged/mini-profiler?sort=faq&amp;pagesize=50">Stack Overflow</a>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">MiniProfiler maintained by <a href="https://github.com/SamSaffron">SamSaffron</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
