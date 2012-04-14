@@ -173,7 +173,11 @@
     </td>
     <td>
       <div class="query">
-        <pre class="profiler-stack-trace">${s.StackTraceSnippet}</pre>
+        <div class="profiler-stack-trace">
+          {{each(i,item) s.StackTraceSnippet}}
+            <abbr title="${item.Definition} [Assembly: ${item.Assembly}]">${item.Name}</abbr>
+          {{/each}}
+        </div>
         <pre class="prettyprint lang-sql"><code>${s.FormattedCommandString}   </code></pre>
       </div>
     </td>

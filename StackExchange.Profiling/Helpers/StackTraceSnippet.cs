@@ -16,15 +16,16 @@ namespace StackExchange.Profiling.Helpers
 		/// Gets the current formatted and filted stack trace.
 		/// </summary>
 		/// <returns>Space separated list of methods</returns>
-		public static string Get()
+		public static List<SqlTimingStackTrace> Get()
 		{
+			var methods = new List<SqlTimingStackTrace>();
+			var stringLength = 0;
+
 			var frames = new StackTrace().GetFrames();
 			if (frames == null)
 			{
-				return "";
+				return methods;
 			}
-
-			var methods = new List<string>();
 
 			foreach (StackFrame t in frames)
 			{
@@ -39,22 +40,28 @@ namespace StackExchange.Profiling.Helpers
 					!ShouldExcludeType(method) &&
 					!MiniProfiler.Settings.MethodsToExclude.Contains(method.Name))
 				{
-					methods.Add(method.Name);
+					var @params = string.Join(",", (from x in method.GetParameters() 
+													select x.Name));
+
+					methods.Add(new SqlTimingStackTrace()
+					{
+						Name = method.Name,
+						Definition = string.Format("{0}.{1}.{2}({3})", 
+												   method.DeclaringType.Namespace, 
+												   method.DeclaringType.Name, 
+												   method.Name,
+												   @params),
+						Assembly = assembly,
+					});
+					stringLength += method.Name.Length;
 				}
+
+				// check against max length
+				if (stringLength > MiniProfiler.Settings.StackMaxLength)
+					break;
 			}
 
-			var result = string.Join(" ", methods);
-
-            if (result.Length > MiniProfiler.Settings.StackMaxLength)
-            {
-                var index = result.IndexOf(" ", MiniProfiler.Settings.StackMaxLength);		
-	            if (index >= MiniProfiler.Settings.StackMaxLength)		
-	            {		
-	                result = result.Substring(0, index);		
-	            }		
-	        }		
-
-			return result;
+			return methods;
 		}
 
 		private static bool ShouldExcludeType(MethodBase method)
