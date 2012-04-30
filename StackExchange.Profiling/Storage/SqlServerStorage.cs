@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,6 +95,7 @@ where not exists (select 1 from MiniProfilers where Id = @Id)"; // this syntax w
                 if (insertCount > 0)
                 {
                     SaveTiming(conn, profiler, profiler.Root);
+                    SaveAttributes(conn, profiler);
                 }
 
                 // we may have a missing client timing - re save
@@ -103,6 +105,36 @@ where not exists (select 1 from MiniProfilers where Id = @Id)"; // this syntax w
                     SaveClientTiming(conn, profiler);
                 }
             }
+        }
+
+        private void SaveAttributes(DbConnection conn, MiniProfiler profiler)
+        {
+            if (profiler.HasAttributes)
+            {
+                foreach (var att in profiler.Attributes)
+                {
+                    SaveAttribute(conn, profiler, att);
+                }
+            }
+        }
+
+        private void SaveAttribute(DbConnection conn, MiniProfiler profiler, MiniProfilerAttribute profilerAttribute)
+        {
+            const string sql =
+            @"insert into MiniProfilerAttributes
+            (MiniProfilerId
+            ,Name
+            ,Value)
+            VALUES
+            (@MiniProfilerId
+            ,@Name
+            ,@Value)";
+            conn.Execute(sql, new
+            {
+                MiniProfilerId = profiler.Id,
+                Name = profilerAttribute.Name,
+                Value = profilerAttribute.Value
+            });
         }
 
         protected virtual void SaveClientTiming(DbConnection conn, MiniProfiler profiler)
@@ -482,6 +514,13 @@ create table MiniProfilerTimings
      ExecutedScalars                     smallint not null,
      ExecutedNonQueries                  smallint not null
   );
+
+    create table MiniProfilerAttributes
+    (
+    MiniProfilerId uniqueidentifier not null,
+    Name varchar(130) not null,
+    Value nvarchar(max) null
+    );
 
 create table MiniProfilerSqlTimings
   (

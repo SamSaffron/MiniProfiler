@@ -116,6 +116,11 @@ namespace StackExchange.Profiling
         /// </summary>
         [DataMember(Order = 9)]
         public ClientTimings ClientTimings { get; set; }
+        /// Stores any attribute names and values used by the user.
+        /// </summary>
+        internal List<MiniProfilerAttribute> Attributes { get; private set; }
+
+        /// <summary>
 
         /// <summary>
         /// Starts when this profiler is instantiated. Each <see cref="Timing"/> step will use this Stopwatch's current ticks as
@@ -185,6 +190,10 @@ namespace StackExchange.Profiling
         /// </summary>
         public Timing Head { get; set; }
 
+        ///<summary>
+        /// Does the attribute collection have any values
+        ///</summary>
+        public bool HasAttributes { get; set; }
 
         /// <summary>
         /// Creates and starts a new MiniProfiler for the root <paramref name="url"/>, filtering <see cref="Timing"/> steps to <paramref name="level"/>.
@@ -194,6 +203,7 @@ namespace StackExchange.Profiling
             Id = Guid.NewGuid();
             Level = level;
             SqlProfiler = new SqlProfiler(this);
+            Attributes = new List<MiniProfilerAttribute>();
             MachineName = Environment.MachineName;
             Started = DateTime.UtcNow;
 
@@ -258,6 +268,18 @@ namespace StackExchange.Profiling
                 return;
 
             Head.AddKeyValue(key, value);
+        }
+
+        ///<summary>
+        ///</summary>
+
+        public void AddAttribute(MiniProfilerAttribute attribute)
+        {
+            if (Attributes == null) return;
+
+            HasAttributes = true;
+
+            Attributes.Add(attribute);
         }
 
         /// <summary>
