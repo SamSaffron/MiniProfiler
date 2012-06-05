@@ -5,8 +5,8 @@ var MiniProfiler = (function ($) {
         container,
         controls,
         fetchedIds = [],
-        fetchingIds = []  // so we never pull down a profiler twice
-        ;
+        fetchingIds = []  // so we never pull down a profiler twice,
+    , ajaxStartTime;
 
     var hasLocalStorage = function () {
         try {
@@ -73,15 +73,15 @@ var MiniProfiler = (function ($) {
             clientPerformance = null;
             clientProbes = null;
 
-            if (id == options.currentId) {
-
-                if (window.mPt) {
-                    clientProbes = mPt.t;
-                    for (j = 0; j < clientProbes.length; j++) {
-                        clientProbes[j].d = clientProbes[j].d.getTime();
-                    }
-                    mPt.t = [];
+            if (window.mPt) {
+                clientProbes = mPt.results();
+                for (j = 0; j < clientProbes.length; j++) {
+                    clientProbes[j].d = clientProbes[j].d.getTime();
                 }
+                mPt.flush();
+            }
+
+            if (id == options.currentId) {
 
                 clientPerformance = getClientPerformance();
 
@@ -90,7 +90,7 @@ var MiniProfiler = (function ($) {
                     var copy = { navigation: {}, timing: {} };
 
                     var timing = $.extend({}, clientPerformance.timing);
-                    
+
                     for (p in timing) {
                         if (timing.hasOwnProperty(p) && !$.isFunction(timing[p])) {
                             copy.timing[p] = timing[p];
@@ -101,6 +101,9 @@ var MiniProfiler = (function ($) {
                     }
                     clientPerformance = copy;
                 }
+            } else if (ajaxStartTime != null && clientProbes.length > 0) {
+                clientPerformance = { timing: { navigationStart: ajaxStartTime.getTime()} };
+                ajaxStartTime = null;
             }
 
             if ($.inArray(id, fetchedIds) < 0 && $.inArray(id, fetchingIds) < 0) {
@@ -433,8 +436,13 @@ var MiniProfiler = (function ($) {
         };
 
         // fetch profile results for any ajax calls
-        if (jQuery && jQuery(document) && jQuery(document).ajaxComplete) {
-            jQuery(document).ajaxComplete(jQueryAjaxComplete);
+        if (jQuery && jQuery(document)) {
+            if (jQuery(document).ajaxComplete) {
+                jQuery(document).ajaxComplete(jQueryAjaxComplete);
+            }
+
+            if (jQuery(document).ajaxStart)
+                jQuery(document).ajaxStart(function () { ajaxStartTime = new Date(); });
         }
 
         // fetch results after ASP Ajax calls
@@ -576,7 +584,7 @@ var MiniProfiler = (function ($) {
         getClientTimings: function (clientTimings) {
             var list = [];
             var t;
-            
+
             if (!clientTimings.Timings) return [];
 
             for (var i = 0; i < clientTimings.Timings.length; i++) {
