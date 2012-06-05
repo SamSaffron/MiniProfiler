@@ -44,8 +44,8 @@
     <a class="efcodefirst" href="javascript:void(0);">EF Code First</a>
 
     <script type="text/javascript">
-        $(function() {
-            $('#fetch-hits').click(function() {
+        $(function () {
+            $('#fetch-hits').click(function () {
                 var table = $('#fetch-results');
 
                 if (table.data('working')) return; // one request at a time, please
@@ -53,23 +53,32 @@
                 table
                     .data('working', true)
                     .fadeTo('fast', 0.3) // dim while fetching
-            
+
                 var tbody = table.find('tbody');
-            
+
+                if (window.mPt) mPt.probe("Before AJAX callback");
+
+                if (window.mPt) mPt.probe("Before AJAX callback");
+                     
                 $.ajax({
                     type: 'GET',
                     url: 'Home/FetchRouteHits',
                     dataType: 'json',
-                    success: function(data) {
+                    success: function (data) {
+
+                        if (window.mPt) mPt.probe("After AJAX callback");
+                        
                         tbody.empty();
                         for (var i = 0; i < data.length; i++) {
                             tbody.append('<tr><td>' + data[i].RouteName + '</td><td>' + data[i].HitCount + '</td></tr>');
                         }
+
+                        if (window.mPt) mPt.probe("After AJAX callback");
                     },
-                    error: function() {
+                    error: function () {
                         alert('oops!')
                     },
-                    complete: function() {
+                    complete: function () {
                         table
                             .fadeTo('fast', 1)
                             .data('working', false);
@@ -77,9 +86,9 @@
                 });
             });
 
-            $('.massive-nesting').click(function() {
+            $('.massive-nesting').click(function () {
                 var link = $(this);
-                $.get('Home/MassiveNesting' + (link.text().indexOf('2') < 0 ? '' : '2'), function(data) {
+                $.get('Home/MassiveNesting' + (link.text().indexOf('2') < 0 ? '' : '2'), function (data) {
                     link.parent().append('<p>' + data + '</p>');
                 });
             });
