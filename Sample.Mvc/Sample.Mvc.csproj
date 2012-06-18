@@ -115,6 +115,10 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.5.1.min.js" />
+    <EmbeddedResource Include="App_Data\MiniProfilerUI\includes.tmpl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_Data\MiniProfilerUI\list.tmpl" />
     <None Include="Service References\SampleService\SampleService.disco" />
     <None Include="Service References\SampleService\configuration91.svcinfo" />
     <None Include="Service References\SampleService\configuration.svcinfo" />
