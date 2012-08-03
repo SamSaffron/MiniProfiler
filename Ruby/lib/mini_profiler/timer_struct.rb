@@ -22,7 +22,7 @@ module Rack
       end
 
       def to_json(*a)
-        ::JSON.generate(@attributes, a[0])
+        ::JSON.generate(@attributes, a[0] || {})
       end
 
     end
