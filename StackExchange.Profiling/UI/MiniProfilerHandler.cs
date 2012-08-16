@@ -155,6 +155,8 @@ namespace StackExchange.Profiling.UI
                 Guid.TryParse(lastId, out lastGuid);
             }
             
+            //After app restart, MiniProfiler.Settings.Storage will be null if no results saved, and NullReferenceException is thrown.
+            if(MiniProfiler.Settings.Storage == null) { MiniProfiler.Settings.EnsureStorageStrategy(); }
             var guids = MiniProfiler.Settings.Storage.List(100);
 
             if (lastGuid != Guid.Empty)
