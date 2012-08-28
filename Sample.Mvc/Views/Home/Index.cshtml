@@ -45,6 +45,17 @@
 
     <script type="text/javascript">
         $(function() {
+
+            //function to test the mPt.probe on initial load.
+            (function() {
+                mPt.probe("Something complex on client load.");
+
+                setTimeout(function() {
+                    mPt.probe("Something complex on client load.");
+
+                }, 25);
+            })();
+            
             $('#fetch-hits').click(function() {
                 var table = $('#fetch-results');
 
@@ -61,10 +72,14 @@
                     url: 'Home/FetchRouteHits',
                     dataType: 'json',
                     success: function(data) {
-                        tbody.empty();
+                        mPt.probe("Bind route hits to DOM");
+                        
+                        tbody.empty();                        
                         for (var i = 0; i < data.length; i++) {
                             tbody.append('<tr><td>' + data[i].RouteName + '</td><td>' + data[i].HitCount + '</td></tr>');
                         }
+
+                        mPt.probe("Bind route hits to DOM");
                     },
                     error: function() {
                         alert('oops!')
