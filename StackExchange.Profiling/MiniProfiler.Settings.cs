@@ -58,7 +58,7 @@ namespace StackExchange.Profiling
                         files.AddRange(System.IO.Directory.EnumerateFiles(customUITemplatesPath));
                     }
 
-                    using (var sha256 = System.Security.Cryptography.SHA256.Create())
+                    using (var sha256 = new System.Security.Cryptography.SHA256CryptoServiceProvider())
                     {
                         byte[] hash = new byte[sha256.HashSize / 8];
                         foreach (string file in files)
