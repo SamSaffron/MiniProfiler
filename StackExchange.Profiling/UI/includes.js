@@ -364,6 +364,9 @@ var MiniProfiler = (function ($) {
                 popupHide(button, popup);
             }
         });
+        $(document).on('click', '.profiler-button span.close', function(){
+            $(this).parent('profiler-result').remove();
+        });
     };
 
     var initFullView = function () {
