@@ -1,6 +1,7 @@
 require 'json'
 require 'timeout'
 require 'thread'
+require 'digest/md5'
 
 require 'mini_profiler/page_timer_struct'
 require 'mini_profiler/sql_timer_struct'
@@ -22,7 +23,8 @@ module Rack
 	class MiniProfiler
 
     # we really should add a cleaner way to version JS and includes
-		VERSION = '108'.freeze
+    TEMPLATE = ::File.expand_path('../../html/includes.tmpl', __FILE__)
+		VERSION = Digest::MD5.hexdigest(::File.read(TEMPLATE)).freeze
 
     class << self 
       
