@@ -128,3 +128,4 @@ end
 
 If you include the query string `pp=help` at the end of your request you will see the various option you have. You can use these options to extend or contract the amount of diagnostics rack-mini-profiler gathers. 
 
+\nDetach Ruby project
