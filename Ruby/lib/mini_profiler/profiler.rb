@@ -347,22 +347,16 @@ module Rack
         body.close if body.respond_to? :close
         return analyze(backtraces, page_struct)
       end
-      
+
 
       # no matter what it is, it should be unviewed, otherwise we will miss POST
       @storage.set_unviewed(page_struct['User'], page_struct['Id'])
 			@storage.save(page_struct)
-			
+
       # inject headers, script
 			if status == 200
 
         client_settings.write!(headers)
-        
-        # mini profiler is meddling with stuff, we can not cache cause we will get incorrect data
-        # Rack::ETag has already inserted some nonesense in the chain
-        headers.delete('ETag')
-        headers.delete('Date')
-        headers['Cache-Control'] = 'must-revalidate, private, max-age=0'
 
 				# inject header
         if headers.is_a? Hash
@@ -373,7 +367,13 @@ module Rack
 				if current.inject_js \
 					&& headers.has_key?('Content-Type') \
 					&& !headers['Content-Type'].match(/text\/html/).nil? then
-					
+
+          # mini profiler is meddling with stuff, we can not cache cause we will get incorrect data
+          # Rack::ETag has already inserted some nonesense in the chain
+          headers.delete('ETag')
+          headers.delete('Date')
+          headers['Cache-Control'] = 'must-revalidate, private, max-age=0'
+
           response = Rack::Response.new([], status, headers)
           script = self.get_profile_script(env)
           if String === body
