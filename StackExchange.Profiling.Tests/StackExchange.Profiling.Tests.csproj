@@ -84,6 +84,10 @@
     <Content Include="lib\HaackHttpSimulator\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StackExchange.Profiling.AdoNet\StackExchange.Profiling.AdoNet.csproj">
+      <Project>{44612123-b2e2-458a-859f-7077134d31c8}</Project>
+      <Name>StackExchange.Profiling.AdoNet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StackExchange.Profiling.EntityFramework\StackExchange.Profiling.EntityFramework.csproj">
       <Project>{7F18DC76-61A2-4E7D-BA5A-FE159E789362}</Project>
       <Name>StackExchange.Profiling.EntityFramework</Name>

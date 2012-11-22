@@ -190,6 +190,10 @@
     <WCFMetadataStorage Include="Service References\SampleService\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StackExchange.Profiling.AdoNet\StackExchange.Profiling.AdoNet.csproj">
+      <Project>{44612123-b2e2-458a-859f-7077134d31c8}</Project>
+      <Name>StackExchange.Profiling.AdoNet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StackExchange.Profiling.EntityFramework\StackExchange.Profiling.EntityFramework.csproj">
       <Project>{7f18dc76-61a2-4e7d-ba5a-fe159e789362}</Project>
       <Name>StackExchange.Profiling.EntityFramework</Name>

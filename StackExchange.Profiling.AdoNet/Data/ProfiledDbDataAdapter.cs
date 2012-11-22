@@ -37,13 +37,13 @@ namespace StackExchange.Profiling.Data
         /// <param name="profiler">The profiler instance or <c>null</c> to get the current instance.</param>
         public ProfiledDbDataAdapter(IDbDataAdapter wrappedAdapter, IDbProfiler profiler = null)
         {
-            if (wrappedAdapter == null)
+            if ( wrappedAdapter == null )
             {
                 throw new ArgumentNullException("wrappedAdapter");
             }
 
             _adapter = wrappedAdapter;
-            _profiler = profiler ?? MiniProfiler.Current;
+            _profiler = profiler; /* TODO: abstract out. ?? MiniProfiler.Current; */
         }
 
         /// <summary>
@@ -78,19 +78,19 @@ namespace StackExchange.Profiling.Data
              * SqlDataAdapter type and would thus work fine with this workaround.
              */
 
-            if (_profiler == null || !_profiler.IsActive || !(_selectCommand is DbCommand))
+            if ( _profiler == null || !_profiler.IsActive || !( _selectCommand is DbCommand ) )
             {
                 return _adapter.Fill(dataSet);
             }
 
             int result;
-            var cmd = (DbCommand)_selectCommand;
+            var cmd = ( DbCommand )_selectCommand;
             _profiler.ExecuteStart(cmd, ExecuteType.Reader);
             try
             {
                 result = _adapter.Fill(dataSet);
             }
-            catch (Exception e)
+            catch ( Exception e )
             {
                 _profiler.OnError(cmd, ExecuteType.Reader, e);
                 throw;

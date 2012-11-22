@@ -27,12 +27,12 @@ namespace StackExchange.Profiling.Data
             get { return bindByName; }
             set
             {
-                if (bindByName != value)
+                if ( bindByName != value )
                 {
-                    if (_cmd != null)
+                    if ( _cmd != null )
                     {
                         var inner = GetBindByName(_cmd.GetType());
-                        if (inner != null) inner(_cmd, value);
+                        if ( inner != null ) inner(_cmd, value);
                     }
                     bindByName = value;
                 }
@@ -41,9 +41,9 @@ namespace StackExchange.Profiling.Data
         static Link<Type, Action<IDbCommand, bool>> bindByNameCache;
         static Action<IDbCommand, bool> GetBindByName(Type commandType)
         {
-            if (commandType == null) return null; // GIGO
+            if ( commandType == null ) return null; // GIGO
             Action<IDbCommand, bool> action;
-            if (Link<Type, Action<IDbCommand, bool>>.TryGet(bindByNameCache, commandType, out action))
+            if ( Link<Type, Action<IDbCommand, bool>>.TryGet(bindByNameCache, commandType, out action) )
             {
                 return action;
             }
@@ -51,9 +51,9 @@ namespace StackExchange.Profiling.Data
             action = null;
             ParameterInfo[] indexers;
             MethodInfo setter;
-            if (prop != null && prop.CanWrite && prop.PropertyType == typeof(bool)
-                && ((indexers = prop.GetIndexParameters()) == null || indexers.Length == 0)
-                && (setter = prop.GetSetMethod()) != null
+            if ( prop != null && prop.CanWrite && prop.PropertyType == typeof(bool)
+                && ( ( indexers = prop.GetIndexParameters() ) == null || indexers.Length == 0 )
+                && ( setter = prop.GetSetMethod() ) != null
                 )
             {
                 var method = new DynamicMethod(commandType.Name + "_BindByName", null, new Type[] { typeof(IDbCommand), typeof(bool) });
@@ -63,7 +63,7 @@ namespace StackExchange.Profiling.Data
                 il.Emit(OpCodes.Ldarg_1);
                 il.EmitCall(OpCodes.Callvirt, setter, null);
                 il.Emit(OpCodes.Ret);
-                action = (Action<IDbCommand, bool>)method.CreateDelegate(typeof(Action<IDbCommand, bool>));
+                action = ( Action<IDbCommand, bool> )method.CreateDelegate(typeof(Action<IDbCommand, bool>));
             }
             // cache it            
             Link<Type, Action<IDbCommand, bool>>.TryAdd(ref bindByNameCache, commandType, ref action);
@@ -73,12 +73,12 @@ namespace StackExchange.Profiling.Data
 
         public ProfiledDbCommand(DbCommand cmd, DbConnection conn, IDbProfiler profiler)
         {
-            if (cmd == null) throw new ArgumentNullException("cmd");
+            if ( cmd == null ) throw new ArgumentNullException("cmd");
 
             _cmd = cmd;
             _conn = conn;
 
-            if (profiler != null)
+            if ( profiler != null )
             {
                 _profiler = profiler;
             }
@@ -109,10 +109,10 @@ namespace StackExchange.Profiling.Data
             {
                 // TODO: we need a way to grab the IDbProfiler which may not be the same as the MiniProfiler, it could be wrapped
                 // allow for command reuse, it is clear the connection is going to need to be reset
-                if (MiniProfiler.Current != null)
+                /* TODO: abstract out. if (MiniProfiler.Current != null)
                 {
                     _profiler = MiniProfiler.Current;
-                }
+                }*/
 
                 _conn = value;
                 var awesomeConn = value as ProfiledDbConnection;
@@ -151,7 +151,7 @@ namespace StackExchange.Profiling.Data
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            if (_profiler == null || !_profiler.IsActive)
+            if ( _profiler == null || !_profiler.IsActive )
             {
                 return _cmd.ExecuteReader(behavior);
             }
@@ -163,7 +163,7 @@ namespace StackExchange.Profiling.Data
                 result = _cmd.ExecuteReader(behavior);
                 result = new ProfiledDbDataReader(result, _conn, _profiler);
             }
-            catch (Exception e)
+            catch ( Exception e )
             {
                 _profiler.OnError(this, ExecuteType.Reader, e);
                 throw;
@@ -177,7 +177,7 @@ namespace StackExchange.Profiling.Data
 
         public override int ExecuteNonQuery()
         {
-            if (_profiler == null || !_profiler.IsActive)
+            if ( _profiler == null || !_profiler.IsActive )
             {
                 return _cmd.ExecuteNonQuery();
             }
@@ -189,7 +189,7 @@ namespace StackExchange.Profiling.Data
             {
                 result = _cmd.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch ( Exception e )
             {
                 _profiler.OnError(this, ExecuteType.NonQuery, e);
                 throw;
@@ -203,7 +203,7 @@ namespace StackExchange.Profiling.Data
 
         public override object ExecuteScalar()
         {
-            if (_profiler == null || !_profiler.IsActive)
+            if ( _profiler == null || !_profiler.IsActive )
             {
                 return _cmd.ExecuteScalar();
             }
@@ -214,7 +214,7 @@ namespace StackExchange.Profiling.Data
             {
                 result = _cmd.ExecuteScalar();
             }
-            catch (Exception e)
+            catch ( Exception e )
             {
                 _profiler.OnError(this, ExecuteType.Scalar, e);
                 throw;
@@ -243,7 +243,7 @@ namespace StackExchange.Profiling.Data
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && _cmd != null)
+            if ( disposing && _cmd != null )
             {
                 _cmd.Dispose();
             }
@@ -257,8 +257,8 @@ namespace StackExchange.Profiling.Data
         public ProfiledDbCommand Clone()
         { // EF expects ICloneable
             ICloneable tail = _cmd as ICloneable;
-            if (tail == null) throw new NotSupportedException("Underlying " + _cmd.GetType().Name + " is not cloneable");
-            return new ProfiledDbCommand((DbCommand)tail.Clone(), _conn, _profiler);
+            if ( tail == null ) throw new NotSupportedException("Underlying " + _cmd.GetType().Name + " is not cloneable");
+            return new ProfiledDbCommand(( DbCommand )tail.Clone(), _conn, _profiler);
         }
         object ICloneable.Clone() { return Clone(); }
 

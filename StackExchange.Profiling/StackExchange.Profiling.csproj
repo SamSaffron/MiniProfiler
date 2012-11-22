@@ -63,24 +63,9 @@
       <DependentUpon>IProfilerProvider.cs</DependentUpon>
     </Compile>
     <Compile Include="ClientTimings.cs" />
-    <Compile Include="Data\ExecuteType.cs" />
-    <Compile Include="Data\IDbProfiler.cs" />
-    <Compile Include="Data\SimpleProfiledCommand.cs" />
-    <Compile Include="Data\SimpleProfiledConnection.cs" />
-    <Compile Include="Data\SimpleProfiledDataReader.cs" />
-    <Compile Include="Data\ProfiledDbDataAdapter.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Data\ProfiledDbProviderFactory.cs" />
-    <Compile Include="Data\SimpleProfiledTransaction.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\Link.cs" />
-    <Compile Include="Data\ProfiledDbCommand.cs" />
-    <Compile Include="Data\ProfiledDbConnection.cs" />
-    <Compile Include="Data\ProfiledDbDataReader.cs" />
-    <Compile Include="Data\ProfiledDbTransaction.cs" />
     <Compile Include="Helpers\IStopwatch.cs" />
     <Compile Include="Helpers\SqlBuilder.cs" />
     <Compile Include="Helpers\SqlMapper.cs" />
@@ -146,7 +131,12 @@
   <ItemGroup>
     <EmbeddedResource Include="UI\jquery.tmpl.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\StackExchange.Profiling.AdoNet\StackExchange.Profiling.AdoNet.csproj">
+      <Project>{44612123-b2e2-458a-859f-7077134d31c8}</Project>
+      <Name>StackExchange.Profiling.AdoNet</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="lib\dotless.Compiler.exe" />
     <EmbeddedResource Include="UI\share.html" />
