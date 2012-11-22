@@ -23,12 +23,12 @@ namespace StackExchange.Profiling.Data
         /// <param name="profiler">The profiler to use</param>
         public SimpleProfiledCommand(IDbCommand command, IDbConnection connection, IDbProfiler profiler)
         {
-            if (command == null) throw new ArgumentNullException("command");
+            if ( command == null ) throw new ArgumentNullException("command");
 
             _command = command;
             _connection = connection;
 
-            if (profiler != null)
+            if ( profiler != null )
             {
                 _profiler = profiler;
             }
@@ -73,7 +73,7 @@ namespace StackExchange.Profiling.Data
 
         private TResult ProfileWith<TResult>(ExecuteType type, Func<TResult> func)
         {
-            if (_profiler == null || !_profiler.IsActive)
+            if ( _profiler == null || !_profiler.IsActive )
             {
                 return func();
             }
@@ -84,7 +84,7 @@ namespace StackExchange.Profiling.Data
             {
                 result = func();
             }
-            catch (Exception e)
+            catch ( Exception e )
             {
                 _profiler.OnError(this, type, e);
                 throw;
@@ -101,10 +101,11 @@ namespace StackExchange.Profiling.Data
             get { return _connection; }
             set
             {
+                /* TODO: abstract out.
                 if (MiniProfiler.Current != null)
                 {
                     _profiler = MiniProfiler.Current;
-                }
+                }*/
 
                 _connection = value;
 
@@ -162,7 +163,7 @@ namespace StackExchange.Profiling.Data
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing && _command != null) _command.Dispose();
+            if ( disposing && _command != null ) _command.Dispose();
 
             _command = null;
             _connection = null;
@@ -172,10 +173,10 @@ namespace StackExchange.Profiling.Data
         public object Clone()
         {
             var tail = _command as ICloneable;
-            if (tail == null)
+            if ( tail == null )
                 throw new NotSupportedException("Underlying " + _command.GetType().Name + " is not cloneable.");
 
-            return new SimpleProfiledCommand((IDbCommand)tail.Clone(), _connection, _profiler);
+            return new SimpleProfiledCommand(( IDbCommand )tail.Clone(), _connection, _profiler);
         }
-    } 
+    }
 }

@@ -20,6 +20,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +96,10 @@
     <Compile Include="WcfCommon.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StackExchange.Profiling.AdoNet\StackExchange.Profiling.AdoNet.csproj">
+      <Project>{44612123-b2e2-458a-859f-7077134d31c8}</Project>
+      <Name>StackExchange.Profiling.AdoNet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StackExchange.Profiling.Wcf\StackExchange.Profiling.Wcf.csproj">
       <Project>{C471B0E5-0AE4-48E0-A938-02AEDA030C5E}</Project>
       <Name>StackExchange.Profiling.Wcf</Name>
@@ -126,7 +134,6 @@
           <CustomServerUrl>
           </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-          <EnableWcfTestClientForSVCDefaultValue>True</EnableWcfTestClientForSVCDefaultValue>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
