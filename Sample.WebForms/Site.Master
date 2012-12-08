@@ -8,7 +8,7 @@
     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
     </asp:ContentPlaceHolder>
 
-    <%= StackExchange.Profiling.MiniProfiler.RenderIncludes() %>
+    <%= StackExchange.Profiling.MiniProfiler.RenderIncludesAsString() %>
 
 </head>
 <body>

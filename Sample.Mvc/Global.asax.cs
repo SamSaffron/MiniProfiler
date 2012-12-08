@@ -147,6 +147,8 @@ namespace SampleWeb
                 // you may implement this if you need to restrict visibility of profiling lists on a per request basis 
                 return true; // all requests are kosher
             };
+
+            MiniProfiler.Settings.ProfilerProvider = new WebRequestProfilerProvider40();
         }
 
     }

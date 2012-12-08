@@ -57,6 +57,7 @@ namespace Sample.WebForms
 
             MiniProfiler.Settings.Storage = new SampleWeb.Helpers.SqliteMiniProfilerStorage(SampleWeb.MvcApplication.ConnectionString);
             MiniProfiler.Settings.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
+            MiniProfiler.Settings.ProfilerProvider = new WebRequestProfilerProvider40();
         }
     }
 }
