@@ -3,7 +3,7 @@
 <%@ Import Namespace="StackExchange.Profiling" %>
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 
-<% using (MiniProfiler.Current.Step("Default's <head>"))
+<% using (MiniProfilerExtensions.Step(MiniProfiler.Current, "Default's <head>", ProfileLevel.Info))
    {
        System.Threading.Thread.Sleep(20); %>
 

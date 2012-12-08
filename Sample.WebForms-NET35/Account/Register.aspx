@@ -4,11 +4,7 @@
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
-    <asp:CreateUserWizard ID="RegisterUser" runat="server" EnableViewState="false" OnCreatedUser="RegisterUser_CreatedUser">
-        <LayoutTemplate>
-            <asp:PlaceHolder ID="wizardStepPlaceholder" runat="server"></asp:PlaceHolder>
-            <asp:PlaceHolder ID="navigationPlaceholder" runat="server"></asp:PlaceHolder>
-        </LayoutTemplate>
+    <asp:CreateUserWizard ID="RegisterUser" runat="server" EnableViewState="false" OnCreatedUser="RegisterUser_CreatedUser" OnInit="RegisterUser_Init">     
         <WizardSteps>
             <asp:CreateUserWizardStep ID="RegisterUserWizardStep" runat="server">
                 <ContentTemplate>
@@ -63,13 +59,14 @@
                         </fieldset>
                         <p class="submitButton">
                             <asp:Button ID="CreateUserButton" runat="server" CommandName="MoveNext" Text="Create User" 
-                                 ValidationGroup="RegisterUserValidationGroup"/>
+                                 ValidationGroup="RegisterUserValidationGroup" OnClick="CreateUserButton_Click"/>
                         </p>
                     </div>
                 </ContentTemplate>
                 <CustomNavigationTemplate>
                 </CustomNavigationTemplate>
             </asp:CreateUserWizardStep>
+<asp:CompleteWizardStep runat="server"></asp:CompleteWizardStep>
         </WizardSteps>
     </asp:CreateUserWizard>
 </asp:Content>

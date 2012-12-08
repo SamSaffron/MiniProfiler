@@ -8,7 +8,7 @@
     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
     </asp:ContentPlaceHolder>
 
-    <%= StackExchange.Profiling.MiniProfiler.RenderIncludes() %>
+    <%= StackExchange.Profiling.MiniProfiler.RenderIncludesAsString() %>
 
 </head>
 <body>
@@ -36,7 +36,7 @@
                { 
                    System.Threading.Thread.Sleep(20); 
             %>
-                <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal">
+                <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" Orientation="Horizontal">
                     <Items>
                         <asp:MenuItem NavigateUrl="~/Default.aspx" Text="Home"/>
                         <asp:MenuItem NavigateUrl="~/About.aspx" Text="About"/>

@@ -322,15 +322,41 @@ namespace StackExchange.Profiling
         /// do not wish to include the StackExchange.Profiling namespace for the <see cref="MiniProfilerExtensions.Step"/> extension method.
         /// </summary>
         /// <param name="name">A descriptive name for the code that is encapsulated by the resulting IDisposable's lifetime.</param>
+        public static IDisposable StepStatic(string name)
+        {
+            return StepStatic(name, ProfileLevel.Info);
+        }
+
+        /// <summary>
+        /// Returns an <see cref="IDisposable"/> that will time the code between its creation and disposal. Use this method when you
+        /// do not wish to include the StackExchange.Profiling namespace for the <see cref="MiniProfilerExtensions.Step"/> extension method.
+        /// </summary>
+        /// <param name="name">A descriptive name for the code that is encapsulated by the resulting IDisposable's lifetime.</param>
         /// <param name="level">This step's visibility level; allows filtering when <see cref="MiniProfiler.Start"/> is called.</param>
-        public static IDisposable StepStatic(string name, ProfileLevel level = ProfileLevel.Info)
+        public static IDisposable StepStatic(string name, ProfileLevel level)
         {
             return MiniProfilerExtensions.Step(Current, name, level);
+        }
+
+        public static MvcHtmlString RenderIncludes()
+        {
+            return RenderIncludes(null);
+        }
+
+        public static string RenderIncludesAsString()
+        {
+            return RenderIncludesAsString(null);
         }
 
         public static MvcHtmlString RenderIncludes(RenderPosition? position = null, bool? showTrivial = null, bool? showTimeWithChildren = null, int? maxTracesToShow = null, bool? showControls = null, bool? useExistingjQuery = null, bool samplingOnly = false)
         {
             return UI.MiniProfilerHandler.RenderIncludes(Current, position, showTrivial, showTimeWithChildren, maxTracesToShow, showControls, useExistingjQuery);
+        }
+
+        public static string RenderIncludesAsString(RenderPosition? position = null, bool? showTrivial = null, bool? showTimeWithChildren = null, int? maxTracesToShow = null, bool? showControls = null, bool? useExistingjQuery = null, bool samplingOnly = false)
+        {
+            var mvcString = UI.MiniProfilerHandler.RenderIncludes(Current, position, showTrivial, showTimeWithChildren, maxTracesToShow, showControls, useExistingjQuery);
+            return mvcString.ToString();
         }
 
         /// <summary>

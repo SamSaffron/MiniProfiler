@@ -6,6 +6,7 @@ using StackExchange.Profiling.Data;
 using System.Linq;
 using System.Collections.Concurrent;
 using StackExchange.Profiling.Helpers;
+using StackExchange.Profiling.Helpers.Tuples;
 
 namespace StackExchange.Profiling
 {
@@ -37,7 +38,7 @@ namespace StackExchange.Profiling
         /// </summary>
         public void ExecuteStartImpl(IDbCommand command, ExecuteType type)
         {
-            var id = Tuple.Create((object)command, type);
+            var id = Tuple35.Create((object)command, type);
             var sqlTiming = new SqlTiming(command, type, Profiler);
 
             _inProgress[id] = sqlTiming;
@@ -54,7 +55,7 @@ namespace StackExchange.Profiling
         /// </summary>
         public void ExecuteFinishImpl(IDbCommand command, ExecuteType type, DbDataReader reader = null)
         {
-            var id = Tuple.Create((object)command, type);
+            var id = Tuple35.Create((object)command, type);
             var current = _inProgress[id];
             current.ExecutionComplete(isReader: reader != null);
             SqlTiming ignore;
