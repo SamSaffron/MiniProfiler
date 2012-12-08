@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StackExchange.Profiling.AdoNet</RootNamespace>
-    <AssemblyName>StackExchange.Profiling.AdoNet</AssemblyName>
+    <AssemblyName>MiniProfiler35.AdoNet</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

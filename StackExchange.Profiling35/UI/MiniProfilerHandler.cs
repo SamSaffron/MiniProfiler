@@ -410,7 +410,7 @@ namespace StackExchange.Profiling.UI
                 }
                 else
                 {
-                    using (var stream = typeof(MiniProfilerHandler).Assembly.GetManifestResourceStream("StackExchange.Profiling.UI." + filename))
+                    using (var stream = typeof(MiniProfilerHandler).Assembly.GetManifestResourceStream("StackExchange.Profiling35.UI." + filename))
                     using (var reader = new StreamReader(stream))
                     {
                         result = reader.ReadToEnd();

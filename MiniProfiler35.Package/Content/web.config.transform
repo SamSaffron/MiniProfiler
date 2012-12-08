@@ -1,0 +1,7 @@
+<configuration>
+	<system.webServer>
+		<handlers>
+			<add name="MiniProfiler" verb="*" path="/mini-profiler-resources/*" type="StackExchange.Profiling.UI.MiniProfilerHandler, MiniProfiler35"/>
+		</handlers>
+	</system.webServer>
+</configuration>

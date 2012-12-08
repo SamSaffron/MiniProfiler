@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>MiniProfiler35.ADONET</id>
+    <version>2.0.3.13</version>
+    <authors>Marc Gravell, Sam Saffron, Jarrod Dixon, Kerem Kat</authors>
+    <owners>Marc Gravell, Sam Saffron, Jarrod Dixon, Kerem Kat</owners>
+    <description>MiniProfiler35 integration for ADO.NET</description>
+    <projectUrl>https://github.com/krk/MiniProfiler/</projectUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <tags>profiler sql mvc asp.net net35 performance timing</tags>
+    <dependencies>
+      <dependency id="MiniProfiler35" version="2.0.3.13"/>      
+    </dependencies>
+    <language>en-US</language>
+  </metadata>
+  <files>
+    <file src="StackExchange.Profiling.AdoNet\bin\Release\MiniProfiler35.AdoNet.*" target="lib/net35" />
+  </files>
+</package>
