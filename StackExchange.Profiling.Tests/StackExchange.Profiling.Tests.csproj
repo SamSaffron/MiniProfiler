@@ -92,6 +92,10 @@
       <Project>{7F18DC76-61A2-4E7D-BA5A-FE159E789362}</Project>
       <Name>StackExchange.Profiling.EntityFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StackExchange.Profiling35\StackExchange.Profiling35.csproj">
+      <Project>{ab77f5b3-615e-446b-9905-833fdef734a0}</Project>
+      <Name>StackExchange.Profiling35</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StackExchange.Profiling\StackExchange.Profiling.csproj">
       <Project>{386222BD-6B6E-480F-A342-8DE1AB516E2C}</Project>
       <Name>StackExchange.Profiling</Name>

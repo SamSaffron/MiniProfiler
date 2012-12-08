@@ -151,6 +151,10 @@
       <Project>{44612123-b2e2-458a-859f-7077134d31c8}</Project>
       <Name>StackExchange.Profiling.AdoNet</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StackExchange.Profiling35\StackExchange.Profiling35.csproj">
+      <Project>{ab77f5b3-615e-446b-9905-833fdef734a0}</Project>
+      <Name>StackExchange.Profiling35</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StackExchange.Profiling\StackExchange.Profiling.csproj">
       <Project>{386222BD-6B6E-480F-A342-8DE1AB516E2C}</Project>
       <Name>StackExchange.Profiling</Name>

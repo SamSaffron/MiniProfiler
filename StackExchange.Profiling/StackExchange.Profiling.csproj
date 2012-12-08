@@ -59,56 +59,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseProfilerProvider.cs">
-      <DependentUpon>IProfilerProvider.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ClientTimings.cs" />
-    <Compile Include="Helpers\ExtensionMethods.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Helpers\IStopwatch.cs" />
+    <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Helpers\SqlBuilder.cs" />
     <Compile Include="Helpers\SqlMapper.cs" />
-    <Compile Include="Helpers\StackTraceSnippet.cs" />
-    <Compile Include="Helpers\HaackFormatter.cs" />
-    <Compile Include="IpAddressProvider.cs">
-      <DependentUpon>IUserProvider.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IProfilerProvider.cs" />
-    <Compile Include="IUserProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MiniProfiler.IDbProfiler.cs">
-      <DependentUpon>MiniProfiler.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MiniProfiler.Settings.cs">
-      <DependentUpon>MiniProfiler.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MiniProfiler.cs" />
-    <Compile Include="ClientTimingHelper.cs" />
     <Compile Include="MVCHelpers\ProfilingActionFilter.cs" />
     <Compile Include="MVCHelpers\ProfilingViewEngine.cs" />
     <Compile Include="MVCHelpers\WrappedView.cs" />
-    <Compile Include="SqlFormatters\InlineFormatter.cs" />
-    <Compile Include="SqlFormatters\ISqlFormatter.cs" />
-    <Compile Include="SqlFormatters\OracleFormatter.cs" />
-    <Compile Include="SqlFormatters\SqlServerFormatter.cs" />
-    <Compile Include="SqlTimingParameter.cs">
-      <DependentUpon>SqlTiming.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Storage\HttpRuntimeCacheStorage.cs" />
-    <Compile Include="Storage\IStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlProfiler.cs" />
-    <Compile Include="SqlTiming.cs" />
-    <Compile Include="Storage\DatabaseStorageBase.cs" />
     <Compile Include="Storage\SqlServerStorage.cs" />
-    <Compile Include="Timing.cs" />
-    <Compile Include="UI\MiniProfilerHandler.cs" />
     <Compile Include="WebRequestProfilerProvider.cs" />
-    <Compile Include="WebRequestProfilerProvider.Settings.cs">
-      <DependentUpon>WebRequestProfilerProvider.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="miniprofiler.snk" />
@@ -135,6 +94,10 @@
     <ProjectReference Include="..\StackExchange.Profiling.AdoNet\StackExchange.Profiling.AdoNet.csproj">
       <Project>{44612123-b2e2-458a-859f-7077134d31c8}</Project>
       <Name>StackExchange.Profiling.AdoNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StackExchange.Profiling35\StackExchange.Profiling35.csproj">
+      <Project>{ab77f5b3-615e-446b-9905-833fdef734a0}</Project>
+      <Name>StackExchange.Profiling35</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
