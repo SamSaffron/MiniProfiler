@@ -66,6 +66,25 @@ namespace StackExchange.Profiling.Data
             return wrapped.DatabaseExists(GetRealConnection(connection), commandTimeout, storeItemCollection);
         }
 
+        protected override System.Data.Spatial.DbSpatialServices DbGetSpatialServices(string manifestToken)
+        {
+            return wrapped.GetSpatialServices(manifestToken);
+        }
+        protected override System.Data.Spatial.DbSpatialDataReader GetDbSpatialDataReader(DbDataReader fromReader, string manifestToken)
+        {
+            return wrapped.GetSpatialDataReader(GetRealDataReader(fromReader), manifestToken);
+        }
+
+        private static DbDataReader GetRealDataReader(DbDataReader reader)
+        {
+            var profiled = reader as ProfiledDbDataReader;
+            if (profiled != null)
+            {
+                reader = profiled.WrappedReader;
+            }
+            return reader;
+        }
+
         /// <summary>
         /// Get DB command definition
         /// </summary>

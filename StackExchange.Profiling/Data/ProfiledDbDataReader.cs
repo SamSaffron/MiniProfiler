@@ -13,7 +13,7 @@ namespace StackExchange.Profiling.Data
         private DbConnection _conn;
         private DbDataReader _reader;
         private IDbProfiler _profiler;
-
+        public DbDataReader WrappedReader { get { return _reader; } }
 
         public ProfiledDbDataReader(DbDataReader reader, DbConnection connection, IDbProfiler profiler)
         {
