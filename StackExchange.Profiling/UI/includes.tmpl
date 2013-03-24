@@ -4,6 +4,9 @@
 
     <div class="profiler-button {{if HasDuplicateSqlTimings}}profiler-warning{{/if}}">
     {{if HasDuplicateSqlTimings}}<span class="profiler-nuclear">!</span>{{/if}}
+      <span class="profiler-name">
+        ${Name}
+      </span>
       <span class="profiler-number">
         ${MiniProfiler.formatDuration(DurationMilliseconds)} <span class="profiler-unit">ms</span>
       </span>
