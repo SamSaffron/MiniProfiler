@@ -331,9 +331,10 @@
             bool? showControls = null,
             bool? useExistingjQuery = null, // TODO: we need to deprecate this
             bool samplingOnly = false,      // TODO: can we remove this?
-            bool? startHidden = null)
+            bool? startHidden = null,
+            bool? showProfileNameInFirstView = null)
         {
-            return UI.MiniProfilerHandler.RenderIncludes(Current, position, showTrivial, showTimeWithChildren, maxTracesToShow, showControls, startHidden);
+            return UI.MiniProfilerHandler.RenderIncludes(Current, position, showTrivial, showTimeWithChildren, maxTracesToShow, showControls, startHidden, showProfileNameInFirstView);
         }
 
         /// <summary>

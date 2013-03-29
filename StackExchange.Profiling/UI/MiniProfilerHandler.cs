@@ -119,7 +119,8 @@
             bool? showTimeWithChildren = null,
             int? maxTracesToShow = null,
             bool? showControls = null,
-            bool? startHidden = null)
+            bool? startHidden = null,
+            bool? showProfileNameInFirstView = null)
         {
             if (profiler == null) return new HtmlString("");
 
@@ -144,7 +145,8 @@
                 currentId = profiler.Id,
                 authorized = authorized.ToJs(),
                 toggleShortcut = MiniProfiler.Settings.PopupToggleKeyboardShortcut,
-                startHidden = (startHidden ?? MiniProfiler.Settings.PopupStartHidden).ToJs()
+                startHidden = (startHidden ?? MiniProfiler.Settings.PopupStartHidden).ToJs(),
+                showProfileNameInFirstView = (showProfileNameInFirstView ?? MiniProfiler.Settings.ShowProfileNameInFirstView).ToJs()
             });
 
             return new HtmlString(result);

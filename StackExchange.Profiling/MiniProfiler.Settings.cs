@@ -186,6 +186,13 @@ namespace StackExchange.Profiling
             public static decimal TrivialDurationThresholdMilliseconds { get; set; }
 
             /// <summary>
+            /// Dictates if the "profile name" is displayed in the first view i.e. list view, defaults to false.
+            /// For a per-page override you can use .RenderIncludes(showProfileNameInFirstView: true/false)
+            /// </summary>
+            [DefaultValue(false)]
+            public static bool ShowProfileNameInFirstView { get; set; }
+
+            /// <summary>
             /// Dictates if the "time with children" column is displayed by default, defaults to false.
             /// For a per-page override you can use .RenderIncludes(showTimeWithChildren: true/false)
             /// </summary>

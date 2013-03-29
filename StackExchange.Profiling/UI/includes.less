@@ -267,6 +267,14 @@
         }
     }
 
+	&.profile-name-in-first-view-hidden .profiler-button {
+
+		.profiler-name, .profiler-name-separator {
+			display: none;
+		}
+
+	}
+
     .profiler-button, .profiler-controls {
         display:none;
         z-index:@zindex;
@@ -279,7 +287,7 @@
         &.profiler-button-active {
             background-color:maroon;
 
-            .profiler-number, .profiler-nuclear, .profiler-name {
+            .profiler-number, .profiler-nuclear, .profiler-name, .profiler-name-separator {
                 color:#fff;
                 font-weight:bold;
             }

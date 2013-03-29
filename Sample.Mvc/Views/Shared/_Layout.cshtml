@@ -44,6 +44,6 @@
     </div>
 
     @* renders our UI's css and javascript - best put it in the bottom so it does not effect perf *@
-    @MiniProfiler.RenderIncludes(position: RenderPosition.Left, showTrivial: false, showTimeWithChildren: false, startHidden: startHidden)
+    @MiniProfiler.RenderIncludes(position: RenderPosition.Left, showTrivial: false, showTimeWithChildren: false, startHidden: startHidden/*, showProfileNameInFirstView: true*/)
 </body>
 </html>

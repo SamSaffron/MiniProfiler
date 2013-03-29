@@ -427,6 +427,9 @@ var MiniProfiler = (function () {
             // MiniProfiler.RenderIncludes() sets which corner to render in - default is upper left
             container.addClass("profiler-" + options.renderPosition);
 
+            // hide profile name from list view based on the parameter passed
+            container.addClass("profile-name-in-first-view-" + (options.showProfileNameInFirstView ? "visible" : "hidden"));
+
             //initialize the controls
             initControls(container);
 
@@ -577,6 +580,7 @@ var MiniProfiler = (function () {
                 if (script.getAttribute('data-controls') == 'true') var controls = true;
                 if (script.getAttribute('data-authorized') == 'true') var authorized = true;
                 if (script.getAttribute('data-start-hidden') == 'true') var startHidden = true;
+                if (script.getAttribute('data-show-profile-name') == 'true') var showProfileNameInFirstView = true;
 
                 return {
                     ids: ids,
@@ -590,7 +594,8 @@ var MiniProfiler = (function () {
                     currentId: currentId,
                     authorized: authorized,
                     toggleShortcut: toggleShortcut,
-                    startHidden: startHidden
+                    startHidden: startHidden,
+                    showProfileNameInFirstView: showProfileNameInFirstView
                 }
             })();
 
