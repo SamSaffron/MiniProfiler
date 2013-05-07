@@ -81,7 +81,7 @@ var MiniProfiler = (function () {
                 }
                 mPt.flush();
             }
-            
+
             if (id == options.currentId) {
 
                 clientPerformance = getClientPerformance();
@@ -91,7 +91,7 @@ var MiniProfiler = (function () {
                     var copy = { navigation: {}, timing: {} };
 
                     var timing = $.extend({}, clientPerformance.timing);
-                    
+
                     for (p in timing) {
                         if (timing.hasOwnProperty(p) && !$.isFunction(timing[p])) {
                             copy.timing[p] = timing[p];
@@ -102,9 +102,9 @@ var MiniProfiler = (function () {
                     }
                     clientPerformance = copy;
 
-                    // hack to add chrome timings 
+                    // hack to add chrome timings
                     if (window.chrome && window.chrome.loadTimes) {
-                      var chromeTimes = window.chrome.loadTimes(); 
+                      var chromeTimes = window.chrome.loadTimes();
                       if (chromeTimes.firstPaintTime) {
                         clientPerformance.timing["First Paint Time"] = Math.round(chromeTimes.firstPaintTime * 1000);
                       }
@@ -480,7 +480,7 @@ var MiniProfiler = (function () {
             });
         }
 
-        // more Asp.Net callbacks 
+        // more Asp.Net callbacks
         if (typeof (WebForm_ExecuteCallback) == "function") {
             WebForm_ExecuteCallback = (function (callbackObject) {
                 // Store original function
@@ -645,7 +645,7 @@ var MiniProfiler = (function () {
                         $('head').append($('<link rel="stylesheet" type="text/css" href="' + url + '" />'));
                     }
                     if (!$.tmpl) {
-                        load(options.path + 'jquery.tmpl.js?v=' + options.version, doInit);
+                        load(options.path + 'underscore.js?v=' + options.version, doInit);
                     } else {
                         doInit();
                     }
@@ -709,7 +709,7 @@ var MiniProfiler = (function () {
         getClientTimings: function (clientTimings) {
             var list = [];
             var t;
-            
+
             if (!clientTimings.Timings) return [];
 
             for (var i = 0; i < clientTimings.Timings.length; i++) {
