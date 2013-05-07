@@ -54,7 +54,7 @@ var (
 	ToggleShortcut  = "Alt+P"
 	StartHidden     = false
 
-	Version = "0.2"
+	Version = "0.3"
 
 	staticFiles map[string][]byte
 )
@@ -74,7 +74,7 @@ func init() {
 		"includes.js":     includes_js,
 		"includes.tmpl":   includes_tmpl,
 		"jquery.1.7.1.js": jquery_1_7_1_js,
-		"jquery.tmpl.js":  jquery_tmpl_js,
+		"underscore.js":   underscore_js,
 	}
 }
 

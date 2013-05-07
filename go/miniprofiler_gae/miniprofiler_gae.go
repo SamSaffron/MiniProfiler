@@ -50,7 +50,7 @@ func EnableIfAdminOrDev(r *http.Request) bool {
 // Instance returns the app engine instance id, or the hostname on dev.
 // This is the default for miniprofiler.MachineName.
 func Instance() string {
-	if i := appengine.InstanceID(); i != "" {
+	if i := appengine.InstanceID(); i != "" && !appengine.IsDevAppServer() {
 		return i[len(i)-8:]
 	}
 	return miniprofiler.Hostname()

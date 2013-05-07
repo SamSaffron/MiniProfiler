@@ -82,7 +82,7 @@
             switch (Path.GetFileNameWithoutExtension(path).ToLowerInvariant())
             {
                 case "jquery.1.7.1":
-                case "jquery.tmpl":
+                case "underscore":
                 case "includes":
                 case "list":
                     output = Includes(context, path);
