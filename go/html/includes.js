@@ -5,6 +5,7 @@ var MiniProfiler = (function () {
     var options,
         container,
         controls,
+        tmplCache = {},
         fetchedIds = [],
         fetchingIds = [], // so we never pull down a profiler twice
         ajaxStartTime
@@ -142,7 +143,26 @@ var MiniProfiler = (function () {
     };
 
     var renderTemplate = function (json) {
-        return $('#profilerTemplate').tmpl(json);
+        return $(template('#profilerTemplate', json));
+    };
+
+    var template = function (name, o) {
+        var defaults = {
+            CustomLink: null,
+            CustomTimingNames: null,
+            HasSqlTimings: false,
+            HasTrivialTimings: false
+        };
+
+        try {
+            var tmpl = tmplCache[name] || (tmplCache[name] = _.template($(name).html()));
+            var od = _.defaults(o, defaults);
+            od._self = od;
+            var html = tmpl(od);
+            return html;
+        } catch (e) {
+            console.log("error with: " + name + ": " + e);
+        }
     };
 
     var buttonShow = function (json) {
@@ -460,7 +480,7 @@ var MiniProfiler = (function () {
 
         if (jQuery && jQuery(document).ajaxStart)
             jQuery(document).ajaxStart(function () { ajaxStartTime = new Date(); });
-        
+
         // fetch results after ASP Ajax calls
         if (typeof (Sys) != 'undefined' && typeof (Sys.WebForms) != 'undefined' && typeof (Sys.WebForms.PageRequestManager) != 'undefined') {
             // Get the instance of PageRequestManager.
@@ -666,6 +686,10 @@ var MiniProfiler = (function () {
                     $(deferInit);
                 });
             }
+        },
+
+        tmpl: function (name, o) {
+            return template(name, o);
         },
 
         getClientTimingByName: function (clientTiming, name) {
