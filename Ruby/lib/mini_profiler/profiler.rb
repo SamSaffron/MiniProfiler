@@ -508,7 +508,8 @@ module Rack
     # * you do not want script to be automatically appended for the current page. You can also call cancel_auto_inject
     def get_profile_script(env)
       ids = ids_comma_separated(env)
-      path = "#{env['SCRIPT_NAME']}#{@config.base_url_path}"
+      # Fix for https://github.com/SamSaffron/MiniProfiler/issues/178
+      path = "#{@config.base_url_path}"
       version = MiniProfiler::VERSION
       position = @config.position
       showTrivial = false
