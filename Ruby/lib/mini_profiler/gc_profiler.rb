@@ -1,15 +1,12 @@
 class Rack::MiniProfiler::GCProfiler
   
   def object_space_stats
-    stats = {}
+    stats = Hash.new(0)
     ids = Set.new
-    i=0
     ObjectSpace.each_object { |o|
       begin
-        i = stats[o.class] || 0
-        i += 1
-        stats[o.class] = i
-        ids << o.object_id if Integer === o.object_id 
+        stats[o.class] += 1
+        ids << o.object_id if Integer === o.object_id
       rescue NoMethodError
         # Redis::Future undefines .class and .object_id super weird
       end
@@ -30,11 +27,10 @@ class Rack::MiniProfiler::GCProfiler
   end
 
   def analyze_strings(ids_before,ids_after)
-    result = {}
+    result = Hash.new(0)
     ids_after.each do |id|
       obj = ObjectSpace._id2ref(id)
-      if String === obj && !ids_before.include?(obj.object_id) 
-        result[obj] ||= 0 
+      if String === obj && !ids_before.include?(obj.object_id)
         result[obj] += 1
       end
     end
@@ -60,8 +56,7 @@ class Rack::MiniProfiler::GCProfiler
   end
 
   def profile_gc(app,env)
-    
-    body = [];
+    body = []
 
     stat_before,stat_after,diff,string_analysis = nil
     begin
