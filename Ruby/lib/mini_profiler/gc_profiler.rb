@@ -1,14 +1,16 @@
 class Rack::MiniProfiler::GCProfiler
-  
+
   def object_space_stats
     stats = Hash.new(0)
     ids = Set.new
     ObjectSpace.each_object { |o|
       begin
         stats[o.class] += 1
+        # store object ids for string analysis:
         ids << o.object_id if Integer === o.object_id
       rescue NoMethodError
-        # Redis::Future undefines .class and .object_id super weird
+        # BasicObject derived clases (eg. Redis::Future)
+        # don't have .class or .object_id (but .__id__ is the same)
       end
     }
     {:stats => stats, :ids => ids}
