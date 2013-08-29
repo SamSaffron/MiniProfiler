@@ -15,7 +15,7 @@ class Rack::MiniProfiler::GCProfiler
         # store object ids for string analysis:
         ids << o.object_id if Integer === o.object_id
       rescue NoMethodError
-        # BasicObject derived clases (eg. Redis::Future)
+        # BasicObject derived classes (eg. Redis::Future)
         # don't have .class or .object_id (but .__id__ is the same)
       end
     }
