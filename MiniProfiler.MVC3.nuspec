@@ -13,7 +13,7 @@
     <tags>profiler sql mvc asp.net performance timing</tags>
     <dependencies>
       <dependency id="MiniProfiler" version="2.0.2" />
-      <dependency id="WebActivator" version="1.4" />
+      <dependency id="WebActivatorEx" version="2.0.3" />
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="Microsoft.Web.Infrastructure" targetFramework=".NETFramework4.0" />
