@@ -1,7 +1,7 @@
 module Rack
   class MiniProfiler
     class AbstractStore
-      
+
       def save(page_struct)
         raise NotImplementedError.new("save is not implemented")
       end
@@ -21,7 +21,12 @@ module Rack
       def get_unviewed_ids(user)
         raise NotImplementedError.new("get_unviewed_ids is not implemented")
       end
-    
+
+      def diagnostics(user)
+        # this is opt in, no need to explode if not implemented
+        ""
+      end
+
     end
   end
 end

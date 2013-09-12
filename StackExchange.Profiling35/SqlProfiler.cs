@@ -1,41 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using StackExchange.Profiling.Data;
-using System.Linq;
-using System.Collections.Concurrent;
+﻿namespace StackExchange.Profiling
+{
+    using System;
+    using System.Collections.Concurrent;
+    using System.Data;
+    using System.Data.Common;
+    using System.Linq;
 using StackExchange.Profiling.Helpers;
 using StackExchange.Profiling.Helpers.Tuples;
 
-namespace StackExchange.Profiling
-{
+    using StackExchange.Profiling.Data;
 
-    // TODO: refactor this out into MiniProfiler
     /// <summary>
-    /// Contains helper code to time sql statements.
+    /// Contains helper code to time SQL statements.
     /// </summary>
     public class SqlProfiler
     {
-        ConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming> _inProgress = new ConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming>();
-        ConcurrentDictionary<IDataReader, SqlTiming> _inProgressReaders = new ConcurrentDictionary<IDataReader, SqlTiming>();
+        /// <summary>
+        /// The _in progress.
+        /// </summary>
+        private readonly ConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming> _inProgress = new ConcurrentDictionary<Tuple<object, ExecuteType>, SqlTiming>();
 
         /// <summary>
-        /// The profiling session this SqlProfiler is part of.
+        /// The _in progress readers.
         /// </summary>
-        public MiniProfiler Profiler { get; private set; }
+        private readonly ConcurrentDictionary<IDataReader, SqlTiming> _inProgressReaders = new ConcurrentDictionary<IDataReader, SqlTiming>();
 
         /// <summary>
-        /// Returns a new SqlProfiler to be used in the 'profiler' session.
+        /// Initialises a new instance of the <see cref="SqlProfiler"/> class. 
+        /// Returns a new <c>SqlProfiler</c> to be used in the 'profiler' session.
         /// </summary>
+        /// <param name="profiler">
+        /// The profiler.
+        /// </param>
         public SqlProfiler(MiniProfiler profiler)
         {
             Profiler = profiler;
         }
 
         /// <summary>
+        /// Gets the profiling session this <c>SqlProfiler</c> is part of.
+        /// </summary>
+        public MiniProfiler Profiler { get; private set; }
+
+        /// <summary>
         /// Tracks when 'command' is started.
         /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="type">The type.</param>
         public void ExecuteStartImpl(IDbCommand command, ExecuteType type)
         {
             var id = Tuple35.Create((object)command, type);
@@ -43,21 +54,27 @@ namespace StackExchange.Profiling
 
             _inProgress[id] = sqlTiming;
         }
+
         /// <summary>
         /// Returns all currently open commands on this connection
         /// </summary>
+        /// <returns>the set of SQL timings.</returns>
         public SqlTiming[] GetInProgressCommands()
         {
             return _inProgress.Values.OrderBy(x => x.StartMilliseconds).ToArray();
         }
+
         /// <summary>
         /// Finishes profiling for 'command', recording durations.
         /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="reader">The reader.</param>
         public void ExecuteFinishImpl(IDbCommand command, ExecuteType type, DbDataReader reader = null)
         {
             var id = Tuple35.Create((object)command, type);
             var current = _inProgress[id];
-            current.ExecutionComplete(isReader: reader != null);
+            current.ExecutionComplete(reader != null);
             SqlTiming ignore;
             _inProgress.TryRemove(id, out ignore);
             if (reader != null)
@@ -69,9 +86,11 @@ namespace StackExchange.Profiling
         /// <summary>
         /// Called when 'reader' finishes its iterations and is closed.
         /// </summary>
+        /// <param name="reader">The reader.</param>
         public void ReaderFinishedImpl(IDataReader reader)
         {
             SqlTiming stat;
+
             // this reader may have been disposed/closed by reader code, not by our using()
             if (_inProgressReaders.TryGetValue(reader, out stat))
             {
@@ -83,13 +102,16 @@ namespace StackExchange.Profiling
     }
 
     /// <summary>
-    /// Helper methods that allow operation on SqlProfilers, regardless of their instantiation.
+    /// Helper methods that allow operation on <c>SqlProfilers</c>, regardless of their instantiation.
     /// </summary>
     public static class SqlProfilerExtensions
     {
         /// <summary>
         /// Tracks when 'command' is started.
         /// </summary>
+        /// <param name="sqlProfiler">The SQL Profiler.</param>
+        /// <param name="command">The command.</param>
+        /// <param name="type">The type.</param>
         public static void ExecuteStart(this SqlProfiler sqlProfiler, IDbCommand command, ExecuteType type)
         {
             if (sqlProfiler == null) return;
@@ -99,6 +121,10 @@ namespace StackExchange.Profiling
         /// <summary>
         /// Finishes profiling for 'command', recording durations.
         /// </summary>
+        /// <param name="sqlProfiler">The SQL Profiler.</param>
+        /// <param name="command">The command.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="reader">The reader.</param>
         public static void ExecuteFinish(this SqlProfiler sqlProfiler, IDbCommand command, ExecuteType type, DbDataReader reader = null)
         {
             if (sqlProfiler == null) return;
@@ -108,11 +134,12 @@ namespace StackExchange.Profiling
         /// <summary>
         /// Called when 'reader' finishes its iterations and is closed.
         /// </summary>
+        /// <param name="sqlProfiler">The SQL Profiler.</param>
+        /// <param name="reader">The reader.</param>
         public static void ReaderFinish(this SqlProfiler sqlProfiler, IDataReader reader)
         {
             if (sqlProfiler == null) return;
             sqlProfiler.ReaderFinishedImpl(reader);
         }
-
     }
 }

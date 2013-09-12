@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
-using System.Web.Routing;
-using StackExchange.Profiling.Helpers;
-
-namespace StackExchange.Profiling
+﻿namespace StackExchange.Profiling
 {
+    using System;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Routing;
+
+    using StackExchange.Profiling.Helpers;
+
     /// <summary>
     /// HttpContext based profiler provider.  This is the default provider to use in a web context.
     /// The current profiler is associated with a HttpContext.Current ensuring that profilers are 
@@ -15,9 +14,6 @@ namespace StackExchange.Profiling
     /// </summary>
     public partial class WebRequestProfilerProvider40 : WebRequestProfilerProvider
     {
-        /// <summary>
-        /// Makes sure 'profiler' has a Name, pulling it from route data or url.
-        /// </summary>
         private static void EnsureName(MiniProfiler profiler, HttpRequest request)
         {
             // also set the profiler name to Controller/Action or /url
@@ -37,7 +33,7 @@ namespace StackExchange.Profiling
 
                 if (string.IsNullOrWhiteSpace(profiler.Name))
                 {
-                    profiler.Name = request.Url.AbsolutePath ?? "";
+                    profiler.Name = request.Url.AbsolutePath ?? string.Empty;
                     if (profiler.Name.Length > 50)
                         profiler.Name = profiler.Name.Remove(50);
                 }

@@ -2,6 +2,25 @@
 
 Middleware that displays speed badge for every html page. Designed to work both in production and in development.
 
+
+##rack-mini-profiler needs your help
+
+We have decided to restructure our repository so there is a central UI repo and the various language implementation have thier own.
+
+The new home for rack-mini-profiler is https://github.com/MiniProfiler/rack-mini-profiler
+
+**WE NEED HELP.**
+
+- Moving the repo over here, and setting up a build that reuses https://github.com/MiniProfiler/ui
+- Migrating the internal data structures per spec at: https://github.com/MiniProfiler/ui 
+- Cleaning up the horrendous class structure that using string as keys and crazy non-objects https://github.com/SamSaffron/MiniProfiler/blob/master/Ruby/lib/mini_profiler/sql_timer_struct.rb#L36-L44 
+- Add travis-ci testing at least MRI 1.9.3, JRuby and MRI 2.0
+- Adding code climate 
+
+
+If you feel like taking on any of this start an issue and update us on your progress.
+
+
 ## Using rack-mini-profiler in your app
 
 Install/add to Gemfile
@@ -79,6 +98,22 @@ RedisStore/MemcacheStore work in multi process and multi machine environments (R
 
 Additionally you may implement an AbstractStore for your own provider. 
 
+## User result segregation
+
+MiniProfiler will attempt to keep all user results isolated, out-of-the-box the user provider uses the ip address: 
+
+```ruby
+Rack::MiniProfiler.config.user_provider = Proc.new{|env| Rack::Request.new(env).ip} 
+```
+
+You can override (something that is very important in a multi-machine production setup): 
+
+```ruby
+Rack::MiniProfiler.config.user_provider = Proc.new{ |env| CurrentUser.get(env) } 
+```
+
+The string this function returns should be unique for each user on the system (for anonymous you may need to fall back to ip address)
+
 ## Running the Specs
 
 ```
@@ -95,7 +130,13 @@ You can set configuration options using the configuration accessor on Rack::Mini
 ```
 # Have Mini Profiler show up on the right
 Rack::MiniProfiler.config.position = 'right'
+# Have Mini Profiler start in hidden mode - display with short cut (defaulted to 'Alt+P')
+Rack::MiniProfiler.config.start_hidden = true
+# Don't collect backtraces on SQL queries that take less than 5 ms to execute
+# (necessary on Rubies earlier than 2.0)
+Rack::MiniProfiler.config.backtrace_threshold_ms = 5
 ```
+
 
 In a Rails app, this can be done conveniently in an initializer such as config/initializers/mini_profiler.rb.
 
@@ -129,6 +170,10 @@ if JSON.const_defined?(:Pure)
 end
 ```
 
+## Notes
+
+- Be sure to require rack_mini_profiler last in your Gemfile, when it is required it will monkey patch pg and mysql gems to insert instrumentation. If included too early no SQL will show up.
+
 ## Available Options
 
 * pre_authorize_cb - A lambda callback you can set to determine whether or not mini_profiler should be visible on a given request. Default in a Rails environment is only on in development mode. If in a Rack app, the default is always on.
@@ -136,8 +181,11 @@ end
 * skip_schema_queries - Whether or not you want to log the queries about the schema of your tables. Default is 'false', 'true' in rails development.
 * auto_inject (default true) - when false the miniprofiler script is not injected in the page
 * backtrace_filter - a regex you can use to filter out unwanted lines from the backtraces
+* toggle_shortcut (default Alt+P) - a jquery.hotkeys.js-style keyboard shortcut, used to toggle the mini_profiler's visibility. See http://code.google.com/p/js-hotkeys/ for more info.
+* start_hidden (default false) - Whether or not you want the mini_profiler to be visible when loading a page
+* backtrace_threshold_ms (default zero) - Minimum SQL query elapsed time before a backtrace is recorded. Backtrace recording can take a couple of milliseconds on rubies earlier than 2.0, impacting performance for very small queries.
 
 ## Special query strings 
 
-If you include the query string `pp=help` at the end of your request you will see the various option you have. You can use these options to extend or contract the amount of diagnostics rack-mini-profiler gathers. 
+If you include the query string `pp=help` at the end of your request you will see the various options available. You can use these options to extend or contract the amount of diagnostics rack-mini-profiler gathers. 
 

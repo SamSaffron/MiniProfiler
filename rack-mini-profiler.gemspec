@@ -1,11 +1,12 @@
 Gem::Specification.new do |s|
 	s.name = "rack-mini-profiler"
-	s.version = "0.1.23"
+	s.version = "0.1.31"
 	s.summary = "Profiles loading speed for rack applications."
 	s.authors = ["Sam Saffron", "Robin Ward","Aleks Totic"]
 	s.description = "Profiling toolkit for Rack applications with Rails integration. Client Side profiling, DB profiling and Server profiling."
 	s.email = "sam.saffron@gmail.com"
 	s.homepage = "http://miniprofiler.com"
+  s.license = "MIT"
 	s.files = [
 		'rack-mini-profiler.gemspec',
 	].concat( Dir.glob('Ruby/lib/**/*').reject {|f| File.directory?(f) || f =~ /~$/ } )
