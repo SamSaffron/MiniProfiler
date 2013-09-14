@@ -54,6 +54,7 @@
             MiniProfiler.Settings.ExcludeAssembly("NHibernate"); // Ignore any assembly named NHibernate
             MiniProfiler.Settings.ExcludeMethod("Flush");        // Ignore any method with the name of Flush
             MiniProfiler.Settings.StackMaxLength = 256;          // default is 120 characters
+            MiniProfiler.Settings.ProfilerProvider = new WebRequestProfilerProvider40();
         }
 
         /// <summary>

@@ -1,0 +1,1 @@
+In order to start using MiniProfiler35, please integrate global.asax.miniprofiler to your global.asax file.

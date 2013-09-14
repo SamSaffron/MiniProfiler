@@ -1,9 +1,7 @@
 ﻿namespace Sample.Console
 {
     using System.Data.Common;
-
     using Dapper;
-
     using StackExchange.Profiling;
 
     /// <summary>

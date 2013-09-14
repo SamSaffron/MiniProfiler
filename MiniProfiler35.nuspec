@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>MiniProfiler35</id>
+    <version>2.0.3.13</version>
+    <authors>Marc Gravell, Sam Saffron, Jarrod Dixon, Kerem Kat</authors>
+    <owners>Marc Gravell, Sam Saffron, Jarrod Dixon, Kerem Kat</owners>
+    <description>Lightweight mini-profiler, in particular designed for ASP.NET WebForms sites using .NET Framework 3.5</description>
+    <projectUrl>https://github.com/krk/MiniProfiler/</projectUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <tags>profiler sql mvc asp.net net35 performance timing</tags>
+    <dependencies>
+      <dependency id="TaskParallelLibrary" version="1.0.2856.0" />
+    </dependencies>
+    <language>en-US</language>
+  </metadata>
+  <files>
+    <file src="StackExchange.Profiling35\bin\Release\MiniProfiler35.dll" target="lib\net35" />
+    <file src="StackExchange.Profiling35\bin\Release\MiniProfiler35.pdb" target="lib\net35" />
+    <file src="MiniProfiler35.Package\Content\web.config.transform" target="content\web.config.transform" />
+    <file src="MiniProfiler35.Package\Content\global.asax.miniprofiler" target="content\global.asax.miniprofiler" />
+    <file src="MiniProfiler35.Package\Content\readme.txt" target="readme.txt" />
+  </files>
+</package>

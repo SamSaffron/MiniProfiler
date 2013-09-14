@@ -14,3 +14,6 @@ Ruby/*.gem
 .DS_Store
 tmp
 *~
+*/App_Data/*.MDF
+*/App_Data/*.ldf
+packages

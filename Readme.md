@@ -1,4 +1,6 @@
-This official clone of Mini Profiler
+This is a fork of the official clone of Mini Profiler
+
+This fork refactors ADO.NET profiling classes to a .NET 3.5 project. New StackExchange.Profiling.AdoNet could be used from other .NET projects.
 
 We accept patches and pull requests here. 
 

@@ -17,7 +17,7 @@
         /// <returns>true if the string is null or white space</returns>
         internal static bool IsNullOrWhiteSpace(this string value)
         {
-            return string.IsNullOrWhiteSpace(value);
+            return value == null || string.IsNullOrEmpty(value.Trim());
         }
 
         /// <summary>
@@ -27,7 +27,7 @@
         /// <returns>The <see cref="bool"/>.</returns>
         internal static bool HasValue(this string value)
         {
-            return !string.IsNullOrWhiteSpace(value);
+            return !value.IsNullOrWhiteSpace();
         }
 
         /// <summary>
