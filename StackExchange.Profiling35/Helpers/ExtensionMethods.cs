@@ -68,5 +68,14 @@ namespace StackExchange.Profiling.Helpers
             if (o == null) return null;
             return new JavaScriptSerializer().Serialize(o);
         }
+
+        public static bool TryParse<TEnum>(string value, out TEnum result)
+            where TEnum : struct, IConvertible {
+            var retValue = value != null && Enum.IsDefined(typeof(TEnum), value);
+            result = retValue ?
+                        (TEnum)Enum.Parse(typeof(TEnum), value) :
+                        default(TEnum);
+            return retValue;
+        }
     }
 }

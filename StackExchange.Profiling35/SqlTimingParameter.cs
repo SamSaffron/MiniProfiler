@@ -57,9 +57,20 @@ namespace StackExchange.Profiling
         /// </summary>
         public override int GetHashCode()
         {
-            return ParentSqlTimingId.GetHashCode() ^ Name.GetHashCode() ^ Value.GetHashCode();
+            int hashcode = ParentSqlTimingId.GetHashCode() ^ Name.GetHashCode();
+            
+            if (Value != null)
+                hashcode ^= Value.GetHashCode();
+
+            return hashcode;
         }
 
+        /// <summary>
+        /// The to string.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public override string ToString()
         {
             return string.Format("{0} = {1} ({2})", Name, Value, DbType);

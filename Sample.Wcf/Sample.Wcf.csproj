@@ -88,6 +88,7 @@
     <Compile Include="Helpers\SqliteMiniProfilerStorage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RouteHit.cs" />
     <Compile Include="SampleService.svc.cs">
       <DependentUpon>SampleService.svc</DependentUpon>
     </Compile>

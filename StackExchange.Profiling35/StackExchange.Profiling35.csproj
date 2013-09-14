@@ -70,7 +70,11 @@
     <Compile Include="IProfilerProvider.cs" />
     <Compile Include="IUserProvider.cs" />
     <Compile Include="MiniProfiler.cs" />
+    <Compile Include="MiniProfilerExtensions.cs" />
+    <Compile Include="ProfileLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RenderPosition.cs" />
+    <Compile Include="SingletonProfilerProvider.cs" />
     <Compile Include="SqlFormatters\InlineFormatter.cs" />
     <Compile Include="SqlFormatters\ISqlFormatter.cs" />
     <Compile Include="SqlFormatters\OracleFormatter.cs" />
@@ -83,6 +87,7 @@
     <Compile Include="Storage\DatabaseStorageBase.cs" />
     <Compile Include="Storage\HttpRuntimeCacheStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />
+    <Compile Include="Suppression.cs" />
     <Compile Include="Timing.cs" />
     <Compile Include="UI\MiniProfilerHandler.cs" />
     <Compile Include="WebRequestProfilerProvider.cs" />
