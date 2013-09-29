@@ -89,13 +89,13 @@ namespace StackExchange.Profiling
         /// <summary>
         /// Gets or sets the SQL that was executed.
         /// </summary>
-        [ScriptIgnore]
         [DataMember(Order = 2)]
         public string CommandString { get; set; }
 
         /// <summary>
         /// Gets the command string with special formatting applied based on <c>MiniProfiler.Settings.SqlFormatter</c>
         /// </summary>
+        [ScriptIgnore]
         public string FormattedCommandString
         {
             get
