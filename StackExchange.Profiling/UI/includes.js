@@ -534,20 +534,23 @@ var MiniProfiler = (function () {
           var _send = XMLHttpRequest.prototype.send;
 
           XMLHttpRequest.prototype.send = function sendReplacement(data) {
-            this._onreadystatechange = this.onreadystatechange;
-
-            this.onreadystatechange = function onReadyStateChangeReplacement() {
-              if (this.readyState == 4) {
-                var stringIds = this.getResponseHeader('X-MiniProfiler-Ids');
-                if (stringIds) {
-                  var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
-                  fetchResults(ids);
+            if (typeof (this.miniprofiler) == 'undefined' || typeof (this.miniprofiler.old_onreadystatechange) == 'undefined') {
+              this.miniprofiler = { old_onreadystatechange: this.onreadystatechange };
+  
+              this.onreadystatechange = function onReadyStateChangeReplacement() {
+                if (this.readyState == 4) {
+                  var stringIds = this.getResponseHeader('X-MiniProfiler-Ids');
+                  if (stringIds) {
+                    var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
+                    fetchResults(ids);
+                  }
                 }
-              }
-
-              return this._onreadystatechange.apply(this, arguments);
-            };
-
+  
+                if (this.miniprofiler.old_onreadystatechange != null)
+                  return this.miniprofiler.old_onreadystatechange.apply(this, arguments);
+              };
+            }
+            
             return _send.apply(this, arguments);
           };
         }
