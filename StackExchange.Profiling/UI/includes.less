@@ -266,6 +266,26 @@
             border-left: 1px solid @buttonBorderColor;
         }
     }
+    
+    &.profiler-bottomleft {
+        left:0px;
+        top: inherit;
+        bottom:0px;
+
+        .profiler-button, .profiler-controls {
+            border-right: 1px solid @buttonBorderColor;
+        }
+    }
+
+    &.profiler-bottomright {
+        right:0px;
+        top: inherit;
+        bottom:0px;
+
+        .profiler-button, .profiler-controls {
+            border-left: 1px solid @buttonBorderColor;
+        }
+    }
 
     .profiler-button, .profiler-controls {
         display:none;
