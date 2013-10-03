@@ -50,6 +50,9 @@
     {
         @MiniProfiler.RenderIncludes(position: ViewBag.Orientation, showTrivial: false, showTimeWithChildren: false, startHidden: startHidden)
     }
-    @MiniProfiler.RenderIncludes(position: RenderPosition.Left, showTrivial: false, showTimeWithChildren: false, startHidden: startHidden)
+    else
+    {
+        @MiniProfiler.RenderIncludes(position: RenderPosition.Left, showTrivial: false, showTimeWithChildren: false, startHidden: startHidden)
+    }
 </body>
 </html>
