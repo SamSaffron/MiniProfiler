@@ -45,6 +45,34 @@ namespace SampleWeb.Controllers
         /// <returns>the home page view.</returns>
         public ActionResult Index()
         {
+            DefaultActions();
+            return View();
+        }
+
+        /// <summary>
+        /// the default view, home page, bottom left orientation.
+        /// </summary>
+        /// <returns>the home page view.</returns>
+        public ActionResult BottomLeft()
+        {
+            DefaultActions();
+            ViewBag.Orientation = RenderPosition.BottomLeft;
+            return View("Index");
+        }
+
+        /// <summary>
+        /// the default view, home page, bottom right orientation.
+        /// </summary>
+        /// <returns>the home page view.</returns>
+        public ActionResult BottomRight()
+        {
+            DefaultActions();
+            ViewBag.Orientation = RenderPosition.BottomRight;
+            return View("Index");
+        }
+
+        private void DefaultActions()
+        {
             var profiler = MiniProfiler.Current;
 
             using (profiler.Step("Set page title"))
@@ -63,8 +91,6 @@ namespace SampleWeb.Controllers
                     Thread.Sleep(250);
                 }
             }
-
-            return View();
         }
 
         /// <summary>
