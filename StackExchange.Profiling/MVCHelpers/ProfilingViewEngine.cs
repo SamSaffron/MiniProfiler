@@ -54,7 +54,7 @@ namespace StackExchange.Profiling.MVCHelpers
             {
                 found = new ViewEngineResult(new WrappedView(found.View, name, isPartial), this);
 
-                if (found != null && block != null)
+                if (block != null)
                 {
                     block.Dispose();
                     HttpContext.Current.Items[Key] = null;
@@ -100,9 +100,8 @@ namespace StackExchange.Profiling.MVCHelpers
         /// </summary>
         /// <param name="controllerContext">The controller Context.</param>
         /// <param name="view">The view.</param>
-        public void ReleaseView(ControllerContext controllerContext, IView view)
-        {
-            _wrapped.ReleaseView(controllerContext, view);
+        public void ReleaseView(ControllerContext controllerContext, IView view) {
+            _wrapped.ReleaseView(controllerContext, ((WrappedView)view).Wrapped);
         }
     }
 }
