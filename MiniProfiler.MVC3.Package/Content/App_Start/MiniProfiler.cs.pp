@@ -12,10 +12,10 @@ using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 //using StackExchange.Profiling.Data.EntityFramework;
 //using StackExchange.Profiling.Data.Linq2Sql;
 
-[assembly: WebActivator.PreApplicationStartMethod(
+[assembly: WebActivatorEx.PreApplicationStartMethod(
 	typeof($rootnamespace$.App_Start.MiniProfilerPackage), "PreStart")]
 
-[assembly: WebActivator.PostApplicationStartMethod(
+[assembly: WebActivatorEx.PostApplicationStartMethod(
 	typeof($rootnamespace$.App_Start.MiniProfilerPackage), "PostStart")]
 
 
