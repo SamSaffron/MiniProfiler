@@ -1,1 +1,0 @@
-﻿Code in this folder is taken from http://haacked.com/archive/2007/06/19/unit-tests-web-code-without-a-web-server-using-httpsimulator.aspx
