@@ -1,17 +1,18 @@
 Gem::Specification.new do |s|
 	s.name = "rack-mini-profiler"
-	s.version = "0.1.28"
+	s.version = "0.9.0"
 	s.summary = "Profiles loading speed for rack applications."
 	s.authors = ["Sam Saffron", "Robin Ward","Aleks Totic"]
 	s.description = "Profiling toolkit for Rack applications with Rails integration. Client Side profiling, DB profiling and Server profiling."
 	s.email = "sam.saffron@gmail.com"
 	s.homepage = "http://miniprofiler.com"
+  s.license = "MIT"
 	s.files = [
 		'rack-mini-profiler.gemspec',
-	].concat( Dir.glob('Ruby/lib/**/*').reject {|f| File.directory?(f) || f =~ /~$/ } )
+	].concat( Dir.glob('lib/**/*').reject {|f| File.directory?(f) || f =~ /~$/ } )
 	s.extra_rdoc_files = [
-		"Ruby/README.md",
-    "Ruby/CHANGELOG"
+		"README.md",
+    "CHANGELOG"
 	]
 	s.add_runtime_dependency 'rack', '>= 1.1.3'
   if RUBY_VERSION < "1.9"
@@ -21,6 +22,14 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'activerecord', '~> 3.0'
+  s.add_development_dependency 'dalli'
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'ZenTest'
+  s.add_development_dependency 'autotest'
+  s.add_development_dependency 'redis'
+  s.add_development_dependency 'therubyracer'
+  s.add_development_dependency 'less'
+  s.add_development_dependency 'flamegraph'
 
-  s.require_paths = ["Ruby/lib"]
+  s.require_paths = ["lib"]
 end
