@@ -11,3 +11,5 @@ Docs for the ruby version can be found here: https://github.com/SamSaffron/MiniP
 Licensed under apache 2.0 license, see: http://www.apache.org/licenses/LICENSE-2.0
 
 For bugs and feature requests go to: http://community.miniprofiler.com
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/krk/miniprofiler/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
