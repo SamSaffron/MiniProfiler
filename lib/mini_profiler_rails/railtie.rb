@@ -4,21 +4,27 @@ module Rack::MiniProfilerRails
 
   # call direct if needed to do a defer init
   def self.initialize!(app)
+    
+    raise "MiniProfilerRails initialized twice. Set `require: false' for rack-mini-profiler in your Gemfile" if @already_initialized
+      
     c = Rack::MiniProfiler.config
 
     # By default, only show the MiniProfiler in development mode, in production allow profiling if post_authorize_cb is set
-    c.pre_authorize_cb ||= lambda { |env|
+    #
+    # NOTE: this must be set here with = and not ||=
+    #  The out of the box default is "true"
+    c.pre_authorize_cb = lambda { |env|
       !Rails.env.test?
     }
 
     c.skip_paths ||= []
 
     if Rails.env.development?
-      c.skip_paths << app.config.assets.prefix
+      c.skip_paths << app.config.assets.prefix if app.respond_to? :assets
       c.skip_schema_queries = true
     end
 
-    if Rails.env.production?
+    unless Rails.env.development? || Rails.env.test?
       c.authorization_mode = :whitelist
     end
 
@@ -27,7 +33,8 @@ module Rack::MiniProfilerRails
     end
 
     # The file store is just so much less flaky
-    tmp = Rails.root.to_s + "/tmp/miniprofiler"
+    base_path = Rails.application.config.paths['tmp'].first rescue "#{Rails.root}/tmp"
+    tmp       = base_path + '/miniprofiler'
     FileUtils.mkdir_p(tmp) unless File.exists?(tmp)
 
     c.storage_options = {:path => tmp}
@@ -36,14 +43,20 @@ module Rack::MiniProfilerRails
     # Quiet the SQL stack traces
     c.backtrace_remove = Rails.root.to_s + "/"
     c.backtrace_includes =  [/^\/?(app|config|lib|test)/]
-    c.skip_schema_queries =  Rails.env != 'production'
+    c.skip_schema_queries = (Rails.env.development? || Rails.env.test?)
 
     # Install the Middleware
     app.middleware.insert(0, Rack::MiniProfiler)
 
     # Attach to various Rails methods
-    ::Rack::MiniProfiler.profile_method(ActionController::Base, :process) {|action| "Executing action: #{action}"}
-    ::Rack::MiniProfiler.profile_method(ActionView::Template, :render) {|x,y| "Rendering: #{@virtual_path}"}
+    ActiveSupport.on_load(:action_controller) do
+      ::Rack::MiniProfiler.profile_method(ActionController::Base, :process) {|action| "Executing action: #{action}"}
+    end
+    ActiveSupport.on_load(:action_view) do
+      ::Rack::MiniProfiler.profile_method(ActionView::Template, :render) {|x,y| "Rendering: #{@virtual_path}"}
+    end
+    
+    @already_initialized = true
   end
 
   class Railtie < ::Rails::Railtie

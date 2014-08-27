@@ -47,7 +47,8 @@ if SqlPatches.class_exists? "Mysql2::Client"
       start = Time.now
       result = query_without_profiling(*args,&blk)
       elapsed_time = ((Time.now - start).to_f * 1000).round(1)
-      result.instance_variable_set("@miniprofiler_sql_id", ::Rack::MiniProfiler.record_sql(args[0], elapsed_time))
+      record = ::Rack::MiniProfiler.record_sql(args[0], elapsed_time)
+      result.instance_variable_set("@miniprofiler_sql_id", record) if result
 
       result
 
@@ -117,7 +118,8 @@ if SqlPatches.class_exists? "PG::Result"
       start = Time.now
       result = exec_without_profiling(*args,&blk)
       elapsed_time = ((Time.now - start).to_f * 1000).round(1)
-      result.instance_variable_set("@miniprofiler_sql_id", ::Rack::MiniProfiler.record_sql(args[0], elapsed_time))
+      record = ::Rack::MiniProfiler.record_sql(args[0], elapsed_time)
+      result.instance_variable_set("@miniprofiler_sql_id", record) if result
 
       result
     end
@@ -131,7 +133,8 @@ if SqlPatches.class_exists? "PG::Result"
       elapsed_time = ((Time.now - start).to_f * 1000).round(1)
       mapped = args[0]
       mapped = @prepare_map[mapped] || args[0] if @prepare_map
-      result.instance_variable_set("@miniprofiler_sql_id", ::Rack::MiniProfiler.record_sql(mapped, elapsed_time))
+      record = ::Rack::MiniProfiler.record_sql(mapped, elapsed_time)
+      result.instance_variable_set("@miniprofiler_sql_id", record) if result
 
       result
     end
@@ -142,10 +145,12 @@ if SqlPatches.class_exists? "PG::Result"
 
       start = Time.now
       result = send_query_prepared_without_profiling(*args,&blk)
+
       elapsed_time = ((Time.now - start).to_f * 1000).round(1)
       mapped = args[0]
       mapped = @prepare_map[mapped] || args[0] if @prepare_map
-      result.instance_variable_set("@miniprofiler_sql_id", ::Rack::MiniProfiler.record_sql(mapped, elapsed_time))
+      record = ::Rack::MiniProfiler.record_sql(mapped, elapsed_time)
+      result.instance_variable_set("@miniprofiler_sql_id", record) if result
 
       result
     end
@@ -157,7 +162,8 @@ if SqlPatches.class_exists? "PG::Result"
       start = Time.now
       result = exec_without_profiling(*args,&blk)
       elapsed_time = ((Time.now - start).to_f * 1000).round(1)
-      result.instance_variable_set("@miniprofiler_sql_id", ::Rack::MiniProfiler.record_sql(args[0], elapsed_time))
+      record = ::Rack::MiniProfiler.record_sql(args[0], elapsed_time)
+      result.instance_variable_set("@miniprofiler_sql_id", record) if result
 
       result
     end
@@ -167,7 +173,6 @@ if SqlPatches.class_exists? "PG::Result"
 
   SqlPatches.patched = true
 end
-
 
 # Mongoid 3 patches
 if SqlPatches.class_exists?("Moped::Node")
@@ -180,9 +185,62 @@ if SqlPatches.class_exists?("Moped::Node")
       start = Time.now
       result = process_without_profiling(*args,&blk)
       elapsed_time = ((Time.now - start).to_f * 1000).round(1)
-      result.instance_variable_set("@miniprofiler_sql_id", ::Rack::MiniProfiler.record_sql(args[0].log_inspect, elapsed_time))
+      ::Rack::MiniProfiler.record_sql(args[0].log_inspect, elapsed_time)
 
       result
+    end
+  end
+end
+
+# mongo_mapper patches
+# TODO: Include overrides for distinct, update, cursor, and create
+if SqlPatches.class_exists?("Plucky::Query")
+  class Plucky::Query
+    alias_method :find_each_without_profiling, :find_each
+    alias_method :find_one_without_profiling, :find_one
+    alias_method :count_without_profiling, :count
+    alias_method :remove_without_profiling, :remove
+
+    def find_each(*args, &blk)
+      return profile_database_operation(__callee__, filtered_inspect(), *args, &blk)
+    end
+
+    def find_one(*args, &blk)
+      return profile_database_operation(__callee__, filtered_inspect(args[0]), *args, &blk)
+    end
+
+    def count(*args, &blk)
+      return profile_database_operation(__callee__, filtered_inspect(), *args, &blk)
+    end
+
+    def remove(*args, &blk)
+      return profile_database_operation(__callee__, filtered_inspect(), *args, &blk)
+    end
+
+    private
+
+    def profile_database_operation(method, message, *args, &blk)
+      current = ::Rack::MiniProfiler.current
+      unless current && current.measure
+        return self.send("#{method.id2name}_without_profiling", *args, &blk)
+      end
+
+      start = Time.now
+      result = self.send("#{method.id2name}_without_profiling", *args, &blk)
+      elapsed_time = ((Time.now - start).to_f * 1000).round(1)
+
+      query_message = "#{@collection.name}.#{method.id2name} => #{message}"
+      ::Rack::MiniProfiler.record_sql(query_message, elapsed_time)
+
+      result
+    end
+
+    def filtered_inspect(hash = to_hash())
+      hash_string = hash.reject { |key| key == :transformer }.collect do |key, value|
+        "  #{key}: #{value.inspect}"
+      end.join(",\n")
+
+      "{\n#{hash_string}\n}"
     end
   end
 end
@@ -207,7 +265,7 @@ if SqlPatches.class_exists?("RSolr::Connection") && RSolr::VERSION[0] != "0" #  
           data << "\n#{Rack::Utils.unescape(request_context[:data])}"
         end
       end
-      result.instance_variable_set("@miniprofiler_sql_id", ::Rack::MiniProfiler.record_sql(data, elapsed_time))
+      ::Rack::MiniProfiler.record_sql(data, elapsed_time)
 
       result
     end

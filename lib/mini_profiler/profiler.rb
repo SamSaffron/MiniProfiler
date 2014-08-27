@@ -107,7 +107,9 @@ module Rack
       page_struct = @storage.load(id)
       unless page_struct
         @storage.set_viewed(user(env), id)
-        return [404, {}, ["Request not found: #{request['id']} - user #{user(env)}"]]
+        id = ERB::Util.html_escape(request['id'])
+        user_info = ERB::Util.html_escape(user(env))
+        return [404, {}, ["Request not found: #{id} - user #{user_info}"]]
       end
       unless page_struct['HasUserViewed']
         page_struct['ClientTimings'] = ClientTimerStruct.init_from_form_data(env, page_struct)
@@ -281,16 +283,16 @@ module Rack
           else
             # do not sully our profile with mini profiler timings
             current.measure = false
-            match_data = query_string.match(/flamegraph_sample_rate=(?<rate>[\d\.]+)/)
+            match_data = query_string.match(/flamegraph_sample_rate=([\d\.]+)/)
 
             mode = query_string =~ /mode=c/ ? :c : :ruby
 
-            if match_data && !match_data[:rate].to_f.zero?
-              sample_rate = match_data[:rate].to_f
+            if match_data && !match_data[1].to_f.zero?
+              sample_rate = match_data[1].to_f
             else
               sample_rate = config.flamegraph_sample_rate
             end
-            flamegraph = Flamegraph.generate(nil, fidelity: sample_rate, embed_resources: query_string =~ /embed/, mode: mode) do
+            flamegraph = Flamegraph.generate(nil, :fidelity => sample_rate, :embed_resources => query_string =~ /embed/, :mode => mode) do
               status,headers,body = @app.call(env)
             end
           end
@@ -373,7 +375,7 @@ module Rack
 
       headers.delete('ETag')
       headers.delete('Date')
-      headers['Cache-Control'] = 'must-revalidate, private, max-age=0'
+      headers['Cache-Control'] = 'no-store, must-revalidate, private, max-age=0'
 
       # inject header
       if headers.is_a? Hash
